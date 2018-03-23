@@ -1,0 +1,291 @@
+<!--<pro-header></pro-header>-->
+
+<nz-card [nzBordered]="true">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="25">
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="searchType">{{'Settle.listPage.search.searchType'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="examState" name="examState" [(ngModel)]="BusinessDayForm.searchType" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option  nzLabel="{{'Settle.All'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let Type of queryTypes"
+                                [nzLabel]="Type.name"
+                                [nzValue]="Type.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'Settle.listPage.search.dateTitle'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="beginTime"
+                                       [(ngModel)]="BusinessDayForm.beginTime"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       nzId="beginTime"
+                                       nzPlaceHolder="{{'Settle.listPage.search.beginTime'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split style="line-height: 28px; padding:0 10px;"> - </p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="endTime"
+                                       [(ngModel)]="BusinessDayForm.endTime"
+                                       nzId="endTime"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       [nzDisabledDate]="EndDateDisabled.bind(this)"
+                                       nzPlaceHolder="{{'Settle.listPage.search.endTime'|translate}}"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="agencyCode">{{'Settle.listPage.search.agencyCode'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BusinessDayForm.agencyCode" [name]="'agencyCode'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="agencyCode"
+                                      [tableCfg]="agencyCodeCfg"
+                                      (nzSelect)="agencyCodesearchSelected($event)"
+                                      [displayField]="'name'"
+                                      [valueField]="'orgNo'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="agentno">{{'Settle.listPage.search.agentno'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BusinessDayForm.agentno" [name]="'agentno'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="agentno"
+                                      [tableCfg]="agentnoCfg"
+                                      [searchBefore]="agentnoSearchBefore.bind(this)"
+                                      (nzSelect)="agentnosearchSelected($event)"
+                                      [(displayValue)]="BusinessDayForm.agentName"
+                                      [displayField]="'name'"
+                                      [valueField]="'chanCode'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div nz-row [nzGutter]="25">
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="ChanProNo">{{'Settle.listPage.search.chanProNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BusinessDayForm.chanProNo" [name]="'chanProNo'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="chanProNo"
+                                      [tableCfg]="ChanProNoTableCfg"
+                                      [searchBefore]="chanProNoSearchBefore.bind(this)"
+                                      (nzSelect)="ChanProNoSelected($event)"
+                                      [(displayValue)]="BusinessDayForm.chanProName"
+                                      [displayField]="'name'"
+                                      [valueField]="'chanCode'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="merchantNo">{{'Settle.listPage.search.merchantNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BusinessDayForm.merchantNo"
+                                      [name]="'merchantNo'" [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      nzId="merchantNo"
+                                      [searchBefore]="merchantNoSearchBefore.bind(this)"
+                                      [(displayValue)]="BusinessDayForm.merchantName"
+                                      [tableCfg]="mchTableCfg"
+                                      [displayField]="'name'"
+                                      [valueField]="'merchantNo'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="ally">{{'Settle.listPage.search.ally'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BusinessDayForm.ally"
+                                      [name]="'ally'" [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="ally"
+                                      [tableCfg]="allyTableCfg"
+                                      [displayField]="'companionName'"
+                                      [valueField]="'companion'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="centerId">{{'Settle.listPage.search.centerId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BusinessDayForm.centerId"
+                                      [name]="'centerId'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      nzId="centerId"
+                                      [tableCfg]="centerIdTableCfg"
+                                      [displayField]="'name'"
+                                      [valueField]="'id'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+            <!--支付类型-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="transId">{{'Settle.listPage.search.transId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="transId" name="transId" [(ngModel)]="BusinessDayForm.transId" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option  nzLabel="{{'Settle.All'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let type of payTypes"
+                                [nzLabel]="type.transType"
+                                [nzValue]="type.transId">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="cashState">{{'Settle.listPage.search.cashState'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="cashState" name="cashState" [(ngModel)]="BusinessDayForm.cashState" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option  nzLabel="{{'Settle.All'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let State of cashState"
+                                [nzLabel]="State.name"
+                                [nzValue]="State.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="cashCycle">{{'Settle.listPage.search.cashCycle'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="cashCycle" name="cashCycle" [(ngModel)]="BusinessDayForm.cashCycle" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option  nzLabel="{{'Settle.All'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let Cycle of cashCycle"
+                                [nzLabel]="Cycle.name"
+                                [nzValue]="Cycle.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'Settle.btn.searchBtn'|translate}}</span>
+                </button>
+                <button nz-button  *ngIf="helper.btnRole('MCHBILLREMIT')" (click)="settlePayBtn()" [nzType]="'default'" [nzSize]="'large'">
+                    <span>{{'Settle.btn.settlePayBtn'|translate}}</span>
+                </button>
+                <button nz-button *ngIf="helper.btnRole('MCHBILLEXPORT')" (click)="onExportBtn()" [nzType]="'default'" [nzSize]="'large'">
+                    <span>{{'Settle.btn.onExportBtn'|translate}}</span>
+                </button>
+
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="6" class="header-info">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title1'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.totalQua | number:'0.0-2' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="6" class="header-info">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title2'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.totalFee | number:'0.0-2' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="6" class="header-info">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title3'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.refundQua | number:'0.0-2' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="6" class="text-center">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title4'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.refundFee | number:'0.0-2'}}</p>
+            <em></em>
+        </div>
+    </div>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="5" class="header-info">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title5'|translate}}</p>
+            <p class="display-2">{{ (((summaryCount?.totalFee * 100 )-(summaryCount?.refundFee *100 )) /100)  | number:'0.0-2' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="5" class="header-info">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title6'|translate}}</p>
+            <p class="display-2">{{summaryCount?.cashTotalFee | number:'0.0-2'}}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="5" class="header-info">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title7'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.poundage2 | number:'0.0-2' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="5" class="header-info">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title8'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.trdPodg | number:'0.0-2' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="text-center">
+            <p class="text-grey-dark">{{'Settle.listPage.Band.title9'|translate}}</p>
+            <p class="display-2">{{summaryCount?.cashPodg2 | number:'0.0-2'}}</p>
+            <em></em>
+        </div>
+    </div>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <simple-table #SettleListTable [url]="tableCfg.url" [reqMehtod]="'POST'" [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName" [isAjax]="tableCfg.isAjax">
+        <ng-template st-row="totalQuaRender" let-item let-index="index">
+                <span>{{item['totalQua']}}</span><br><span>{{item['refundQua']}}</span>
+        </ng-template>
+        <ng-template st-row="totalFeeRender" let-item let-index="index">
+                <span>{{(item['totalFee'])}}</span> <br><span>{{(item['refundFee'])}}</span>
+        </ng-template>
+        <ng-template st-row="cashTotalFeeRender" let-item let-index="index">
+            <span>{{(item['cashTotalFee'])}}</span>
+        </ng-template>
+        <ng-template st-row="priceRender" let-item let-index="index">
+                <span>{{(((item['trdPodg'] * 1000000) - (item['trdRefundPodg'] * 1000000) ))/1000000 | number:'0.0-6'}}</span> <br><span>{{(((item['poundage2'] *1000000)-(item['refundPodg2']*1000000))/1000000) | number:'0.0-6'}}</span>
+        </ng-template>
+        <ng-template st-row="trdSettleRateRender" let-item let-index="index">
+                <span>{{((item['trdSettleRate'] )* 1000).toFixed(2)}}</span> <br><span>{{((item['settleRate'])* 1000).toFixed(2)}}</span>
+        </ng-template>
+        <ng-template st-row="cashStateRender" let-item let-index="index">
+                <ng-container [ngSwitch]="item['cashState']">
+                    <nz-tag *ngSwitchCase='0' [nzColor]="'orange'">{{helper.dictTrans('CASH_STATUS', item['cashState'])}}</nz-tag>
+                    <nz-tag *ngSwitchCase='1' [nzColor]="'green'" >{{helper.dictTrans('CASH_STATUS', item['cashState'])}}</nz-tag>
+                    <nz-tag *ngSwitchCase='2' [nzColor]="'red'">{{helper.dictTrans('CASH_STATUS', item['cashState'])}}</nz-tag>
+                </ng-container>
+        </ng-template>
+        <ng-template st-row="settleCycleRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['settleCycle']">
+                <span *ngSwitchCase='0' >{{helper.dictTrans('BALANCE_DATE', item['settleCycle'])}}</span>
+                <span *ngSwitchCase='1' >{{helper.dictTrans('BALANCE_DATE', item['settleCycle'])}}</span>
+                <span *ngSwitchCase='2' >{{helper.dictTrans('BALANCE_DATE', item['settleCycle'])}}</span>
+                <span *ngSwitchCase='3' >{{helper.dictTrans('BALANCE_DATE', item['settleCycle'])}}</span>
+                <span *ngSwitchCase='4' >{{helper.dictTrans('BALANCE_DATE', item['settleCycle'])}}</span>
+                <span *ngSwitchCase='5' >{{helper.dictTrans('BALANCE_DATE', item['settleCycle'])}}</span>
+                <span *ngSwitchCase='6' >{{helper.dictTrans('BALANCE_DATE', item['settleCycle'])}}</span>
+                <span *ngSwitchCase='7' >{{helper.dictTrans('BALANCE_DATE', item['settleCycle'])}}</span>
+            </ng-container>
+        </ng-template>
+
+    </simple-table>
+</nz-card>

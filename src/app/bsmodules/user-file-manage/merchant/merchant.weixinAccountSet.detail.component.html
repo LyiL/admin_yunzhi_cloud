@@ -1,0 +1,40 @@
+<nz-card [nzBordered]="false" class="ng-card-m" nzTitle="{{'Mch.WXconfig.title'|translate}}">
+        <ng-container *ngFor=" let i of  WxInfoData">
+            <ng-container *ngFor="let cFields of WxConfigDetailFields">
+                <desc-list size="large" class="mb-lg" col="2"  title="{{cFields.title}}">
+                <ng-container *ngFor="let cField of cFields.children">
+                    <desc-list-item term="{{cField.title}}">
+                        <ng-template #isEmptyValue> / </ng-template>
+                        <ng-container *ngIf="!helper.isEmpty(i[cField.field]); else isEmptyValue">
+                            <ng-container [ngSwitch]="cField.type">
+                                <ng-container *ngSwitchCase="'array'">
+                                    {{i[cField.field].join('； ')}}
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'arrayObject'">
+                                    <ng-container *ngFor="let list of i[cField.field]" >
+                                        {{list.subAppid + "；"}}
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>{{i[cField.field]}}</ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </desc-list-item>
+                </ng-container>
+                </desc-list>
+            </ng-container>
+        </ng-container>
+    <div nz-row class="text-center">
+        <div nz-col>
+            <button nz-button [nzSize]="'large'" (click)="onBack()">
+                {{'default.btn.backBtn'|translate}}
+            </button>
+        </div>
+    </div>
+</nz-card>
+
+
+
+
+
+
+

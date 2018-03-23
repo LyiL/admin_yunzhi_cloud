@@ -1,0 +1,79 @@
+<!--子商户模式配置-->
+<!--<nz-card [nzBordered]="false"-->
+         <!--nzTitle="{{'SP.detailPage.infoCfg.subMchPattern.title'|translate}}"-->
+         <!--class="ng-card-m"-->
+         <!--*ngIf="helper.btnRole('SPSUBMCHMODEDEPLOY')">-->
+    <!--<ng-template #extra>-->
+        <!--<a (click)="onEditSubMchPattern()">{{'default.btn.configBtn'|translate}}</a>-->
+    <!--</ng-template>-->
+    <!--<desc-list size="large" class="mb-lg" col="2">-->
+        <!--<ng-container *ngFor="let cField of subMchPatternFields">-->
+            <!--<desc-list-item term="{{cField.title}}">-->
+                <!--<ng-template #isEmptyValue> / </ng-template>-->
+                <!--<ng-container *ngIf="!helper.isEmpty(subMchPatternData); else isEmptyValue">-->
+                    <!--<ng-container *ngIf="!helper.isEmpty(subMchPatternData[cField.field]); else isEmptyValue">-->
+                        <!--<ng-container [ngSwitch]="cField.type">-->
+                            <!--<ng-container *ngSwitchCase="'dict'">-->
+                                <!--{{subMchPatternData[cField.field]|dictTrans:cField['transKey']}}-->
+                            <!--</ng-container>-->
+                            <!--<ng-container *ngSwitchDefault>{{subMchPatternData[cField.field]}}</ng-container>-->
+                        <!--</ng-container>-->
+                    <!--</ng-container>-->
+                <!--</ng-container>-->
+            <!--</desc-list-item>-->
+        <!--</ng-container>-->
+    <!--</desc-list>-->
+<!--</nz-card>-->
+
+<nz-card [nzBordered]="false" class="ng-card-m">
+    <nz-tabset [nzTabPosition]="'left'" [nzType]="'line'">
+        <!--公众号配置-->
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                {{'SP.detailPage.infoCfg.weixin.title'|translate}}
+            </ng-template>
+            <div nz-row class="config-row">
+                <a (click)="addWeixin()" *ngIf="helper.btnRole('PROVIDERWXCONFIGADD') && helper.isEmpty(weixinData)">{{'default.btn.newBtn'|translate}}</a>
+                <a (click)="editWeixin()" *ngIf="helper.btnRole('PROVIDERWXCONFIGUPDATE') && !helper.isEmpty(weixinData)">{{'default.btn.editBtn'|translate}}</a>
+            </div>
+            <div nz-row>
+                <desc-list size="large" col="2">
+                    <ng-container *ngFor="let cField of weixinFields">
+                        <desc-list-item term="{{cField.title}}">
+                            <ng-template #isEmptyValue> / </ng-template>
+                            <ng-container *ngIf="!helper.isEmpty(weixinData); else isEmptyValue">
+                                <ng-container *ngIf="!helper.isEmpty(weixinData[cField.field]); else isEmptyValue">
+                                    {{weixinData[cField.field]}}
+                                </ng-container>
+                            </ng-container>
+                        </desc-list-item>
+                    </ng-container>
+                </desc-list>
+            </div>
+        </nz-tab>
+
+        <!--交易限额配置-->
+        <nz-tab *ngIf="helper.btnRole('PROSETTOTALFEELIMIT')">
+            <ng-template #nzTabHeading>
+                {{'SP.detailPage.infoCfg.tradeLimit.title'|translate}}
+            </ng-template>
+            <div nz-row class="config-row">
+                <a (click)="onEditTradeLimit()">{{'default.btn.configBtn'|translate}}</a>
+            </div>
+            <div nz-row>
+                <desc-list size="large" col="2">
+                    <ng-container *ngFor="let cField of tradeLimitFields">
+                        <desc-list-item term="{{cField.title}}">
+                            <ng-template #isEmptyValue> / </ng-template>
+                            <ng-container *ngIf="!helper.isEmpty(tradeLimitData); else isEmptyValue">
+                                <ng-container *ngIf="!helper.isEmpty(tradeLimitData[cField.field]); else isEmptyValue">
+                                    {{tradeLimitData[cField.field]}}
+                                </ng-container>
+                            </ng-container>
+                        </desc-list-item>
+                    </ng-container>
+                </desc-list>
+            </div>
+        </nz-tab>
+    </nz-tabset>
+</nz-card>

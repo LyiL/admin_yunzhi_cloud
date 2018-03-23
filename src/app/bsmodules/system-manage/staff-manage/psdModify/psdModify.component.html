@@ -1,0 +1,26 @@
+
+<form nz-form   [formGroup]="modifypwd" (ngSubmit)="submitForm()" >
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="7" >
+            <div nz-form-label><label for="userPwd" nz-form-item-required>{{'staffPsd.html.userPwd'|translate}}</label></div>
+        </div>
+        <div nz-form-control nz-col [nzSm]="17" nzHasFeedback>
+            <nz-input  nzSize="large"   formControlName="userPwd" [nzType]="'password'"[nzId]="'userPwd'" [(ngModel)]="psdmodel.userPwd" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"  required></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('userPwd').dirty&&getFormControl('userPwd').hasError('required')">{{'StaffM.listPage.html.pleaseuserPwd'|translate}}</div>
+            <div nz-form-explain *ngIf="getFormControl('userPwd').dirty&&getFormControl('userPwd').hasError('minlength')">{{'StaffM.listPage.html.Pwdminlength'|translate}}</div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="7" >
+            <div nz-form-label><label for="userPwdc" nz-form-item-required>{{'staffPsd.html.userPwdc'|translate}}</label></div>
+        </div>
+        <div nz-form-control nz-col [nzSm]="17" nzHasFeedback>
+            <nz-input  nzSize="large" [nzType]="'password'"  formControlName="userPwdc" name="userPwdc" [(ngModel)]="psdmodel.userPwdc"  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" required></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('userPwdc').dirty&&getFormControl('userPwdc').hasError('required')">{{'StaffM.listPage.html.pleaseuserPwd'|translate}}</div>
+            <div nz-form-explain *ngIf="getFormControl('userPwdc').dirty&&getFormControl('userPwdc').hasError('confirm')">{{'StaffM.listPage.html.confirmuserPwdc'|translate}}</div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'" [nzLoading]="isLoading"   [disabled]="!modifypwd.valid">{{'staffPsd.html.qus'|translate}}</button>
+    </div>
+</form>

@@ -1,0 +1,106 @@
+<form nz-form [formGroup]="refundStrategyForm" (ngSubmit)="onSave()">
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="6">
+            <label for="name" nz-form-item-required>{{'RefundSets.refStrategyPage.win.name'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'" formControlName="name" [nzId]="'name'" [(ngModel)]="model.name" nzDisabled="true"></nz-input>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label  nz-col  [nzSm]="6">
+            <label for="transId" nz-form-item-required>{{'RefundSets.refStrategyPage.win.transId'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-select nzId="transId" name="transId" [(ngModel)]="model.transId" formControlName="transId" (nzSelectChange)="getTransType($event)" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                <nz-option nzValue="*" nzLabel="{{'RefundSets.refStrategyPage.message.allType'|translate}}"></nz-option>
+                <nz-option
+                    *ngFor="let payType of payTypes | async"
+                    [nzLabel]="payType.transType"
+                    [nzValue]="payType.transId">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label  nz-col  [nzSm]="6">
+            <label for="useState" nz-form-item-required>{{'RefundSets.refStrategyPage.win.useState'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-select nzId="useState" name="useState" [(ngModel)]="model.useState" formControlName="useState" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                <nz-option
+                    *ngFor="let useState of useStates"
+                    [nzLabel]="useState.name"
+                    [nzValue]="useState.id">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col  [nzSm]="6">
+            <label for="refundDayRange" nz-form-item-required>{{'RefundSets.refStrategyPage.win.refundDayRange'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'" formControlName="refundDayRange" [nzId]="'refundDayRange'" [(ngModel)]="model.refundDayRange" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('refundDayRange').dirty&&getFormControl('refundDayRange').hasError('required')">
+                {{'RefundSets.refStrategyPage.validationMessages.refundRequied'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('refundDayRange').dirty&&getFormControl('refundDayRange').value&&getFormControl('refundDayRange').hasError('numberError')">
+                {{'RefundSets.refStrategyPage.validationMessages.refundNumber'|translate}}
+            </div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col  [nzSm]="6">
+            <label for="dayRefundCount" nz-form-item-required>{{'RefundSets.refStrategyPage.win.dayRefundCount'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'" formControlName="dayRefundCount" [nzId]="'dayRefundCount'" [(ngModel)]="model.dayRefundCount" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('dayRefundCount').dirty&&getFormControl('dayRefundCount').hasError('required')">
+                {{'RefundSets.refStrategyPage.validationMessages.refundRequied'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('dayRefundCount').dirty&&getFormControl('dayRefundCount').hasError('maxlength')">
+                {{'RefundSets.refStrategyPage.validationMessages.dayRefCountMaxLength'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('dayRefundCount').dirty&&getFormControl('dayRefundCount').value&&getFormControl('dayRefundCount').hasError('numberError')">
+                {{'RefundSets.refStrategyPage.validationMessages.refundNumber'|translate}}
+            </div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col  [nzSm]="6">
+            <label for="singleRefundFee" nz-form-item-required>{{'RefundSets.refStrategyPage.win.singleRefundFee'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'" formControlName="singleRefundFee" [nzId]="'singleRefundFee'" [(ngModel)]="model.singleRefundFee" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('singleRefundFee').dirty&&getFormControl('singleRefundFee').hasError('required')">
+                {{'RefundSets.refStrategyPage.validationMessages.refundRequied'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('singleRefundFee').dirty&&getFormControl('singleRefundFee').value&&getFormControl('singleRefundFee').hasError('numberError')">
+                {{'RefundSets.refStrategyPage.validationMessages.refundNumber'|translate}}
+            </div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col  [nzSm]="6">
+            <label for="dayRefundFee" nz-form-item-required>{{'RefundSets.refStrategyPage.win.dayRefundFee'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'" formControlName="dayRefundFee" [nzId]="'dayRefundFee'" [(ngModel)]="model.dayRefundFee" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('dayRefundFee').dirty&&getFormControl('dayRefundFee').hasError('required')">
+                {{'RefundSets.refStrategyPage.validationMessages.refundRequied'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('dayRefundFee').dirty&&getFormControl('dayRefundFee').value&&getFormControl('dayRefundFee').hasError('numberError')">
+                {{'RefundSets.refStrategyPage.validationMessages.refundNumber'|translate}}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!(refundStrategyForm.valid)">{{'default.btn.saveBtn'|translate}}</button>
+    </div>
+    <!--<div nz-form-item nz-row  class="text-center">-->
+        <!--<div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">-->
+            <!--<button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!(refundStrategyForm.valid)">{{'default.btn.saveBtn'|translate}}</button>-->
+        <!--</div>-->
+    <!--</div>-->
+</form>

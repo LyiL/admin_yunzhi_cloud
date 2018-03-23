@@ -1,0 +1,73 @@
+<form nz-form [formGroup]="tradeBatchNoticeForm" (ngSubmit)="_submitForm()">
+    <!--通知时间-->
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="5">
+            <label nz-form-item-required>{{'TradeNotice.win.notice.noticeTime'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSpan]="9">
+            <nz-datepicker [nzSize]="'large'"
+                           name="tradeTimeStart"
+                           formControlName="tradeTimeStart"
+                           [(ngModel)]="model.tradeTimeStart"
+                           [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                           nzPlaceHolder="{{'TradeNotice.win.notice.tradeTimeStart'|translate}}"></nz-datepicker>
+        </div>
+        <div nz-col nz-form-control [nzSpan]="1" class="text-center"> - </div>
+        <div nz-col nz-form-control [nzSpan]="9">
+            <nz-datepicker [nzSize]="'large'"
+                           name="tradeTimeEnd"
+                           formControlName="tradeTimeEnd"
+                           [(ngModel)]="model.tradeTimeEnd"
+                           [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                           [nzDisabledDate]="onTradeTimeEndDateDisabled.bind(this)"
+                           nzPlaceHolder="{{'TradeNotice.win.notice.tradeTimeEnd'|translate}}"></nz-datepicker>
+        </div>
+    </div>
+    <!--商户名称-->
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="5">
+            <label nz-form-item-required>{{'TradeNotice.win.notice.mchNo'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSpan]="19">
+            <search-input [(ngModel)]="model.mchNo"
+                          name="mchNo"
+                          formControlName="mchNo"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                          nzId="mchNo"
+                          [displayField]="'name'"
+                          [valueField]="'merchantNo'"
+                          [tableCfg]="merchantNoTableCfg"></search-input>
+        </div>
+    </div>
+    <!--通知状态-->
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="5">
+            <label nz-form-item-required>{{'TradeNotice.win.notice.notifyState'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSpan]="19">
+            <nz-select nzId="notifyState"
+                       name="notifyState"
+                       formControlName="notifyState"
+                       [nzSize]="'large'"
+                       [(ngModel)]="model.notifyState"
+                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                       nzAllowClear>
+                <nz-option
+                    *ngFor="let notifyState of notifyStates"
+                    [nzLabel]="notifyState.name"
+                    [nzValue]="notifyState.id">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!tradeBatchNoticeForm.valid" [nzLoading]="isLoadingOne">
+            <span>{{'Modal.okText'|translate}}</span>
+        </button>
+    </div>
+</form>
+
+
+
+

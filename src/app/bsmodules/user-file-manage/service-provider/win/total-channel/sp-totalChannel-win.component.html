@@ -1,0 +1,27 @@
+<form nz-form [formGroup]="totalChannelForm" (ngSubmit)="_submitForm()">
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="5">
+            <label nz-form-item-required>
+                {{'SP.win.totalChannel.bankLabel'|translate}}
+            </label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <search-input [(ngModel)]="model.bankNo"
+                          formControlName="bankNo"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                          [tableCfg]="bankNoCfg"
+                          [displayField]="'name'"
+                          [valueField]="'orgNo'"
+                          [displayValue]="model.bankName"
+                          (nzSelect)="onBankNoSelected($event)"></search-input>
+            <div nz-form-explain *ngIf="getFormControl('bankNo').dirty&&getFormControl('bankNo').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!totalChannelForm.valid" [nzLoading]="isLoadingOne">{{'Modal.okText'|translate}}</button>
+    </div>
+</form>
+

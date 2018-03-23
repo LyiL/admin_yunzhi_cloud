@@ -1,0 +1,168 @@
+<!--<pro-header></pro-header>-->
+
+<nz-card [nzBordered]="true">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label for="name">{{'IntoPieces.listPage.search.name'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="IntoListForm.name"
+                                  name="name"
+                                  nzId="name"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label for="merchantNo">{{'IntoPieces.listPage.search.merchantNo'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="IntoListForm.merchantNo"
+                                  name="merchantNo"
+                                  nzId="merchantNo"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="superior">{{'IntoPieces.listPage.search.bankName'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="IntoListForm.bankNo"
+                                      [name]="'bankNo'"
+                                      nzId="bankNo"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'orgNo'"
+                                      [tableCfg]="bankNoCfg"
+                                      (nzSelect)="onBankCodeSelected($event)"
+                                       ></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="superior">{{'IntoPieces.listPage.search.superior'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="IntoListForm.superior"
+                                      [name]="'superior'"
+                                      nzId="superior"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'chanCode'"
+                                      [tableCfg]="superiorCfg"
+                                      [(displayValue)]="IntoListForm.superiorName"
+                                      [searchBefore]="onParentChanSearchBefore.bind(this)"
+                                      (nzSelect)="onParentChanSelect($event)"></search-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>{{'IntoPieces.listPage.search.applyState'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzAllowClear
+                                   nzId="applyState"
+                                   name="applyState"
+                                   [(ngModel)]="IntoListForm.applyState"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option nzLabel="{{'SP.hint.all'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of applyState"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+
+                <button nz-button *ngIf="helper.btnRole('INTONEW')" (click)="onAddIntopiece()" [nzType]="'default'" [nzSize]="'large'">
+                    <span>{{'IntoPieces.listPage.search.addBtn'|translate}}</span>
+                </button>
+
+                <!--<button nz-button *ngIf="helper.btnRole('BATCHAPPLY')" (click)="onBatchIntopiece()" [nzType]="'default'" [nzSize]="'large'">-->
+                    <!--<span>{{'IntoPieces.listPage.search.batchBtn'|translate}}</span>-->
+                <!--</button>-->
+            </div>
+        </div>
+
+    </form>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <simple-table #intoListTable [url]="tableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="tableCfg.params"
+                  [total]="tableCfg.total"
+                  [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName"
+                  [reqReName]="tableCfg.reqReName"
+                  [isAjax]="tableCfg.isAjax">
+
+        <ng-template st-row="merchantCodeRender" let-item>
+            <span>{{!helper.isEmpty(item['merchantCode']) ? item['merchantCode'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="chanNameRender" let-item>
+            <span>{{!helper.isEmpty(item['chanName']) ? item['chanName'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="centerNameRender" let-item>
+            <span>{{!helper.isEmpty(item['centerName']) ? item['centerName'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="agencyNameRender" let-item>
+            <span>{{!helper.isEmpty(item['agencyName']) ? item['agencyName'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="providerNoRender" let-item>
+            <span>{{!helper.isEmpty(item['providerNo']) ? item['providerNo'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="applyStateRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['applyState']">
+                <nz-tag *ngSwitchCase='0' [nzColor]="'red'">{{helper.dictTrans('APPLY_STATE', item['applyState'])}}
+                </nz-tag>
+                <nz-tag *ngSwitchCase='1' [nzColor]="'orange'">{{helper.dictTrans('APPLY_STATE', item['applyState'])}}
+                </nz-tag>
+                <nz-tag *ngSwitchCase='2' [nzColor]="'green'">{{helper.dictTrans('APPLY_STATE', item['applyState'])}}
+                </nz-tag>
+                <nz-tag *ngSwitchCase='3' [nzColor]="'red'">{{helper.dictTrans('APPLY_STATE', item['applyState'])}}
+                </nz-tag>
+                <nz-tag *ngSwitchCase='4' [nzColor]="'red'">{{helper.dictTrans('APPLY_STATE', item['applyState'])}}
+                </nz-tag>
+            </ng-container>
+        </ng-template>
+
+        <ng-template st-row="allyRender" let-item>
+            <span>{{!helper.isEmpty(item['ally']) ? item['ally'] : '/'}}</span>
+        </ng-template>
+
+    </simple-table>
+</nz-card>
+

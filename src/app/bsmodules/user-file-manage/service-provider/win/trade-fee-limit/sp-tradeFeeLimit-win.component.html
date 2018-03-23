@@ -1,0 +1,30 @@
+<form nz-form [formGroup]="tradeFeeLimitForm" (ngSubmit)="_submitForm()">
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="9">
+            <label nz-form-item-required>
+                {{'SP.detailPage.infoCfg.tradeLimit.detail.totalFeeLimit'|translate}}
+            </label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="15" nzHasFeedback>
+            <nz-input [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                      [(ngModel)]="model.totalFeeLimit"
+                      nzType="number"
+                      formControlName="totalFeeLimit"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('totalFeeLimit').dirty&&getFormControl('totalFeeLimit').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('totalFeeLimit').dirty&&getFormControl('totalFeeLimit').hasError('minError')">
+                {{'SP.win.tradeFeeLimit.minMsg'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('totalFeeLimit').dirty&&getFormControl('totalFeeLimit').hasError('deciError')">
+                {{'SP.win.tradeFeeLimit.deciMsg'|translate}}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!tradeFeeLimitForm.valid" [nzLoading]="isLoadingOne">{{'Modal.okText'|translate}}</button>
+    </div>
+</form>
+
+

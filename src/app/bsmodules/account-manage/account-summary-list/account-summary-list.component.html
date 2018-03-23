@@ -1,0 +1,231 @@
+<!--<pro-header></pro-header>-->
+
+<nz-card [nzBordered]="true">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row>
+
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccSummary.listPage.search.dateTitle' | translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="billTimeStart"
+                                       [(ngModel)]="summaryForm.billTimeStart"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       nzId="billTimeStart"
+                                       nzPlaceHolder="{{'AccSummary.listPage.search.billTimeStart' | translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split"> {{line}} </p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="billTimeEnd"
+                                       [(ngModel)]="summaryForm.billTimeEnd"
+                                       nzId="billTimeEnd"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       [nzDisabledDate]="billTimeEndDateDisabled.bind(this)"
+                                       nzPlaceHolder="{{'AccSummary.listPage.search.billTimeEnd' | translate}}"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccSummary.listPage.search.bankName'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="summaryForm.agencyCode"
+                                      [name]="'agencyCode'"
+                                      nzId="agencyCode"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput' | translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'orgNo'"
+                                      [tableCfg]="agencyCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccSummary.listPage.search.ally' | translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="summaryForm.ally"
+                                      [name]="'ally'"
+                                      nzId="ally"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput' | translate}}"
+                                      [displayField]="'companionName'"
+                                      [valueField]="'companion'"
+                                      [tableCfg]="allyCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccSummary.listPage.search.reconState' | translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzAllowClear
+                                   nzId="reconState"
+                                   name="reconState"
+                                   [(ngModel)]="summaryForm.reconState"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose' | translate}}">
+                            <nz-option [nzLabel]="'全部'"></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of reconState"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div nz-row [nzGutter]="24">
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccSummary.listPage.search.transId' | translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzAllowClear
+                                   nzId="transId"
+                                   name="transId"
+                                   [(ngModel)]="summaryForm.transId"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose' | translate}}">
+                            <nz-option [nzLabel]="'全部'"></nz-option>
+                            <nz-option
+                                *ngFor="let payType of payTypes"
+                                [nzLabel]="payType.transType"
+                                [nzValue]="payType.transId">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccSummary.listPage.search.centerId' | translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="summaryForm.centerId"
+                                      [name]="'centerId'"
+                                      nzId="centerId"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput' | translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'id'"
+                                      [tableCfg]="centerCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn' | translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+
+<nz-card [nzBordered]="true">
+    <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.totalQua' | translate}}</p>
+            <p class="display-2">{{ summaryCount?.totalQua }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.totalFee' | translate}}</p>
+            <p class="display-2">{{ summaryCount?.totalFee | number: '0.0-6' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.refundQua'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.refundQua }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.refundFee' | translate}}</p>
+            <p class="display-2">{{ summaryCount?.refundFee | number: '0.0-6'}}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.errTotalQua' | translate}}</p>
+            <p class="display-2">{{ summaryCount?.errTotalQua }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="text-center">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.errTotalFee' | translate}}</p>
+            <p class="display-2">{{ summaryCount?.errTotalFee | number:'0.0-6' }}</p>
+            <em></em>
+        </div>
+    </div>
+</nz-card>
+
+<nz-card [nzBordered]="true">
+    <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.tradeFee' | translate}}</p>
+            <p class="display-2">{{ (((summaryCount?.totalFee * 100) - (summaryCount?.refundFee * 100)) / 100) | number: '0.0-6' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.procsFeeEx' | translate}}</p>
+            <p class="display-2">{{ summaryCount?.procsFeeEx | number:'0.0-6' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="8" class="text-center">
+            <p class="text-grey-dark">{{'AccSummary.listPage.panelCfg.arriveFee' | translate}}</p>
+            <p class="display-2">{{ (((summaryCount?.totalFee * 100) - (summaryCount?.refundFee * 100) - (summaryCount?.procsFeeEx * 100)) / 100) | number:'0.0-6' }}</p>
+            <em></em>
+        </div>
+    </div>
+</nz-card>
+
+<nz-card [nzBordered]="true">
+    <simple-table #summaryTable [url]="tableCfg.url" [reqMehtod]="'POST'"
+                  [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName"
+                  [isAjax]="tableCfg.isAjax">
+
+        <ng-template st-row="reconDayRender" let-item>
+            <span>{{item['reconDay']|date:'yyyy-MM-dd'}}</span> <br> <span>{{!helper.isEmpty(item['ally']) ? item['ally'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="totalFeeRender" let-item>
+        <span>{{item['totalFee']}}</span> <br> <span>{{item['refundFee']}}</span>
+        </ng-template>
+
+        <ng-template st-row="eqTotalFeeRender" let-item>
+            <span>{{item['eqTotalFee']}}</span> <br> <span>{{item['eqRefundFee']}}</span>
+        </ng-template>
+
+        <ng-template st-row="totalQuaRender" let-item>
+            <span>{{item['totalQua']}}</span> <br> <span>{{item['refundQua']}}</span>
+        </ng-template>
+
+        <ng-template st-row="errTotalQuaRender" let-item>
+            <span>{{item['errTotalQua']}}</span> <br> <span>{{item['errTotalFee'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <ng-template st-row="transNameRender" let-item>
+            <span>{{!helper.isEmpty(item['transName']) ? item['transName'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="reconStateRender" let-item let-index="index">
+            <ng-template #isEmptyValue> / </ng-template>
+            <ng-container [ngSwitch]="item['reconState']" *ngIf="!helper.isEmpty(item['reconState']); else isEmptyValue">
+                <nz-tag *ngSwitchCase='0' [nzColor]="'green'">{{helper.dictTrans('PARTNER_PRCSTATUS', item['reconState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='1' [nzColor]="'red'">{{helper.dictTrans('PARTNER_PRCSTATUS', item['reconState'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>

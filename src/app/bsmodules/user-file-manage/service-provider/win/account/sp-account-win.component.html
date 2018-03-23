@@ -1,0 +1,165 @@
+<form nz-form [formGroup]="SpAccountWinFormGroup" (ngSubmit)="onSubmit()">
+    <div nz-row [nzType]="'flex'" [nzJustify]="'space-between'">
+		<!--开户名称-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="name" nz-form-item-required>{{'SP.detailPage.detail.accountTable.name'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16" nzHasFeedback>
+                <nz-input [(ngModel)]="model.name"
+                          name="name"
+                          nzId="name"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="name"></nz-input>
+                <div nz-form-explain
+                     *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+            </div>
+        </div>
+		<!--账户类型-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.detail.accountTable.type'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="type"
+                           name="type"
+                           [(ngModel)]="model.type"
+                           formControlName="type"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                           (nzSelectChange)="onChangeControl('type')">
+                    <nz-option
+                        *ngFor="let accountType of accountTypes"
+                        [nzLabel]="accountType.name"
+                        [nzValue]="accountType.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+		<!--银行账号-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="bankCardno" nz-form-item-required>{{'SP.detailPage.detail.accountTable.bankCardno'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16" nzHasFeedback>
+                <nz-input [(ngModel)]="model.bankCardno"
+                          name="bankCardno"
+                          nzId="bankCardno"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="bankCardno"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('bankCardno').dirty&&getFormControl('bankCardno').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+                <div nz-form-explain *ngIf="getFormControl('bankCardno').dirty&&getFormControl('bankCardno').value&&getFormControl('bankCardno').hasError('numberError')">
+                    {{'default.validationMessages.numberErr'|translate}}
+                </div>
+            </div>
+        </div>
+		<!--开户行-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="bankName" nz-form-item-required>{{'SP.detailPage.detail.accountTable.bankName'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16" nzHasFeedback>
+                <nz-input [(ngModel)]="model.bankName"
+                          name="bankName"
+                          nzId="bankName"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="bankName"></nz-input>
+                <div nz-form-explain
+                     *ngIf="getFormControl('bankName').dirty&&getFormControl('bankName').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+            </div>
+        </div>
+		<!--开户支行-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="subbranchName" *ngIf="onChangeControl('type')" nz-form-item-required>{{'SP.detailPage.detail.accountWin.subbranchName'|translate}}</label>
+                <label for="subbranchName" *ngIf="!onChangeControl('type')">{{'SP.detailPage.detail.accountWin.subbranchName'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <search-input
+                              [(ngModel)]="model.subbranchName"
+                              [name]="'subbranchName'"
+                              nzId="subbranchName"
+                              [nzSize]="'large'"
+                              formControlName="subbranchName"
+                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                              [displayField]="'subBankName'"
+                              [valueField]="'linkNo'"
+                              [tableCfg]="subBankCfg"
+                              (nzSelect)="subSelect($event)"></search-input>
+                <div nz-form-explain *ngIf="onChangeControl('type')" style="color:red;">
+                    {{'Agency.addPage.tips.typeTip'|translate}}
+                </div>
+            </div>
+        </div>
+		<!--联行号-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="subbanrchCode" *ngIf="onChangeControl('type')" nz-form-item-required>{{'SP.detailPage.detail.accountWin.subbanrchCode'|translate}}</label>
+                <label for="subbanrchCode" *ngIf="!onChangeControl('type')">{{'SP.detailPage.detail.accountWin.subbanrchCode'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.subbanrchCode"
+                          name="subbanrchCode"
+                          nzId="subbanrchCode"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="subbanrchCode"></nz-input>
+                <div nz-form-explain *ngIf="onChangeControl('type')" style="color:red;">
+                    {{'Agency.addPage.tips.typeTip'|translate}}
+                </div>
+            </div>
+        </div>
+		<!--支付类型-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.detail.accountTable.transId'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzTags nzShowSearch nzId="transId"
+                           name="transId"
+                           [(ngModel)]="tmpTransIdArr"
+                           formControlName="transId"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                    <nz-option
+                        *ngFor="let payType of payTypes"
+                        [nzLabel]="payType?.label"
+                        [nzValue]="payType?.value">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+		<!--行内账户-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.detail.accountTable.cardType'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="cardType"
+                           name="cardType"
+                           [(ngModel)]="model.cardType"
+                           formControlName="cardType"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                    <nz-option
+                        *ngFor="let eStatus of cardType"
+                        [nzLabel]="eStatus.name"
+                        [nzValue]="eStatus.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!SpAccountWinFormGroup.valid" [nzLoading]="isLoadingOne">
+            <span>{{'default.btn.saveBtn' | translate}}</span>
+		</button>
+    </div>
+</form>

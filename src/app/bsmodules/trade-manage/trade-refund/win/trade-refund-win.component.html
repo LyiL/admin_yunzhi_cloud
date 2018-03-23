@@ -1,0 +1,86 @@
+<form nz-form [formGroup]="treApplyForm" (ngSubmit)="_submitForm()">
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="5">
+            <label nz-form-item-required>{{'TradeRefund.win.orderNo'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                      formControlName="orderNo"
+                      (nzBlur)="orderNoBlur()"
+                      [(ngModel)]="tradeRefundApplyModel.orderNo"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('orderNo').dirty&&getFormControl('orderNo').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="5">
+            <label nz-form-item-required>{{'TradeRefund.win.availableFee'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'"
+                      formControlName="availableFee"
+                      [(ngModel)]="availableFee"
+                      nzDisabled="true"></nz-input>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="5">
+            <label nz-form-item-required>{{'TradeRefund.win.merchantNo'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18">
+            <search-input [(ngModel)]="tradeRefundApplyModel.merchantNo"
+                          formControlName="merchantNo"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                          [tableCfg]="merchantNoCfg"
+                          [displayField]="'name'"
+                          [valueField]="'merchantNo'"></search-input>
+            <div nz-form-explain *ngIf="getFormControl('merchantNo').dirty&&getFormControl('merchantNo').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="5">
+            <label nz-form-item-required>{{'TradeRefund.win.refundFee'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                      formControlName="refundFee"
+                      nzType="number"
+                      [(ngModel)]="tmpRefundFee"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('refundFee').dirty&&getFormControl('refundFee').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('refundFee').dirty&&getFormControl('refundFee').hasError('minError')">
+                {{'TradeRefund.win.refundFeeMinAlert'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('refundFee').dirty&&getFormControl('refundFee').hasError('maxError')">
+                {{'TradeRefund.win.refundFeeMaxAlert'|translate}}
+            </div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="5">
+            <label nz-form-item-required>{{'TradeRefund.win.mchRefuseReason'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [(ngModel)]="tradeRefundApplyModel.mchRefuseReason"
+                      formControlName="mchRefuseReason"
+                      [nzType]="'textarea'"
+                      [nzRows]="'4'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('mchRefuseReason').dirty&&getFormControl('mchRefuseReason').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!treApplyForm.valid" [nzLoading]="isLoadingOne">
+            <span>{{'Modal.okText'|translate}}</span>
+        </button>
+    </div>
+</form>

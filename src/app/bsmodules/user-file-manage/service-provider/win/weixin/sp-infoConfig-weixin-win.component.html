@@ -1,0 +1,58 @@
+<form nz-form [formGroup]="weixinForm" (ngSubmit)="_submitForm()">
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="7">
+            <label nz-form-item-required>
+                {{'SP.win.weixin.subAppid'|translate}}
+            </label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="16" nzHasFeedback>
+            <nz-input [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                      [(ngModel)]="model.subAppid"
+                      formControlName="subAppid" (nzBlur)="onSubAppidBlur()"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('subAppid').dirty&&getFormControl('subAppid').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="7">
+            <label nz-form-item-required>
+                {{'SP.win.weixin.subscribeAppid'|translate}}
+            </label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="16" nzHasFeedback>
+            <nz-input [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                      [(ngModel)]="model.subscribeAppid"
+                      formControlName="subscribeAppid"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('subscribeAppid').dirty&&getFormControl('subscribeAppid').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="7">
+            <label nz-form-item-required>
+                {{'SP.win.weixin.subAppid'|translate}}
+            </label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="16" nzHasFeedback>
+            <nz-input [nzSize]="'large'"
+                      nzType="textarea"
+                      nzPlaceHolder="{{'SP.win.weixin.jsapiPathTip'|translate}}"
+                      [(ngModel)]="model.jsapiPath"
+                      formControlName="jsapiPath"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('jsapiPath').dirty&&getFormControl('jsapiPath').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('jsapiPath').dirty&&getFormControl('jsapiPath').hasError('limitError')">
+                {{'SP.win.weixin.jsapiPathLimit'|translate}}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!weixinForm.valid" [nzLoading]="isLoadingOne">{{'Modal.okText'|translate}}</button>
+    </div>
+</form>
+

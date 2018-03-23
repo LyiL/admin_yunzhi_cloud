@@ -1,0 +1,51 @@
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="18">
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label >{{'cashManage.cashAccoutDeteil.search.time'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="startDate"
+                                       [(ngModel)]="accoutDeailForm.startDate"
+                                       [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                       nzId="startDate"
+                                       nzPlaceHolder="{{'cashManage.cashAccoutDeteil.search.startDate'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split"> - </p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="endDate"
+                                       [(ngModel)]="accoutDeailForm.endDate"
+                                       nzId="endDate"
+                                       [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                       nzPlaceHolder="{{'cashManage.cashAccoutDeteil.search.endDate'|translate}}"
+                                       [nzDisabledDate]="onTradeTimeEndDateDisabled.bind(this)"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #cashAccoutdetailTable
+                  [url]="cashAccoutdetailCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="cashAccoutdetailCfg.params"
+                  [columns]="cashAccoutdetailCfg.tableColumns"
+                  [resReName]="cashAccoutdetailCfg.resReName"
+                  [reqReName]="cashAccoutdetailCfg.reqReName"
+                  [isAjax]="cashAccoutdetailCfg.isAjax">
+        <!--<ng-template st-row="descriptrender" let-item>-->
+            <!--<ng-container  *ngIf="item['descript']" >item['descript']</ng-container>-->
+            <!--<ng-container *ngIf="!item['descript']" >/</ng-container>-->
+        <!--</ng-template>-->
+    </simple-table>
+</nz-card>

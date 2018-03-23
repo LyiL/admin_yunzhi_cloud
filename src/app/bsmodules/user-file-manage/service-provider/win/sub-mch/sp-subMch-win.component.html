@@ -1,0 +1,29 @@
+<div>
+    <nz-tabset>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                {{'Agency.listPage.tableCols.mchCount'|translate}}
+            </ng-template>
+            <h4>{{_dealerInfoCount}}</h4>
+            <simple-table #subMchTable
+                          [url]="tableCfg.url"
+                          [reqMehtod]="'POST'"
+                          [extraParams]="tableCfg.params"
+                          [columns]="tableCfg.tableColumns"
+                          [resReName]="tableCfg.resReName"
+                          [reqReName]="tableCfg.reqReName"
+                          [isAjax]="tableCfg.isAjax"
+                          [class.simple-win-table]="true">
+                <ng-template st-row="examStateRender" let-item let-index="index">
+                    <ng-container [ngSwitch]="item['examState']">
+                        <nz-tag *ngSwitchCase="0" [nzColor]="'orange'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+                        <nz-tag *ngSwitchCase="1" [nzColor]="'green'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+                        <nz-tag *ngSwitchCase="2" [nzColor]="'red'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+                        <nz-tag *ngSwitchCase="3" [nzColor]="'gray'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+                        <nz-tag *ngSwitchCase="4" [nzColor]="'gray'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+                    </ng-container>
+                </ng-template>
+            </simple-table>
+        </nz-tab>
+    </nz-tabset>
+</div>

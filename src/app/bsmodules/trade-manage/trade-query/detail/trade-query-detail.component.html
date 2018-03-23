@@ -1,0 +1,32 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="false" class="ng-card-m">
+    <desc-list size="large" class="mb-lg" col="2">
+        <ng-container *ngFor="let cField of tqDetailFields">
+            <desc-list-item term="{{cField.title}}">
+                <ng-template #isEmptyValue> / </ng-template>
+                <ng-container *ngIf="!helper.isEmpty(tqInfoData[cField.field]); else isEmptyValue">
+                    <ng-container [ngSwitch]="cField.type">
+                        <ng-container *ngSwitchCase="'dict'">
+                            {{tqInfoData[cField.field]|dictTrans:cField['transKey']}}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'datetime'">
+                            {{tqInfoData[cField.field]|_date:cField['format']}}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'currency'">
+                            {{tqInfoData[cField.field]|moneySpunYuanTrans:'1.0-2'}}
+                            <!--{{helper.numberTrans(tqInfoData[cField.field],'division',100) | number:'1.0-2'}}-->
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>{{tqInfoData[cField.field]}}</ng-container>
+                    </ng-container>
+                </ng-container>
+            </desc-list-item>
+        </ng-container>
+    </desc-list>
+    <div nz-row class="text-center">
+        <div nz-col>
+            <button nz-button [nzSize]="'large'" (click)="_onBack()">
+                {{'default.btn.backBtn'|translate}}
+            </button>
+        </div>
+    </div>
+</nz-card>

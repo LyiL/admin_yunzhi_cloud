@@ -1,0 +1,138 @@
+<!--<pro-header ></pro-header>-->
+
+<nz-card [nzBordered]="true">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="25">
+            <!--时间-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="createTime">{{'BatchSettle.listPage.search.dateTitle'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-datepicker [nzSize]="'large'"
+                                       nzPlaceHolder="{{'BatchSettle.listPage.search.createTime'|translate}}"
+                                       nzId="createTime"
+                                       class="d-block"
+                                       [(ngModel)]="BatchSettleForm.createTime"
+                                       name="createTime"
+                                       (ngModelChange)="onChangeTime($event)"
+                        ></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="settleNo">{{'BatchSettle.listPage.search.settleNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="settleNo" name="settleNo" [(ngModel)]="BatchSettleForm.settleNo" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option  nzLabel="{{'BatchSettle.All'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let batch of batchs"
+                                [nzLabel]="batch.settleNo"
+                                [nzValue]="batch.settleNo">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="actType">{{'BatchSettle.listPage.search.actType'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="actType" name="actType" [(ngModel)]="BatchSettleForm.actType" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option  nzLabel="{{'BatchSettle.All'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let Type of actType"
+                                [nzLabel]="Type.name"
+                                [nzValue]="Type.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="agencyCode">{{'Settle.listPage.search.agencyCode'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BatchSettleForm.agencyCode" [name]="'agencyCode'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="agencyCode"
+                                      [tableCfg]="agencyCodeCfg"
+                                      (nzSelect)="agencyCodesearchSelected($event)"
+                                      [displayField]="'name'"
+                                      [valueField]="'orgNo'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div nz-row [nzGutter]="25">
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="specNo">{{'BatchSettle.listPage.search.specNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BatchSettleForm.specNo"
+                                      [name]="'specNo'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="specNo"
+                                      [tableCfg]="mchTableCfg"
+                                      [displayField]="'name'"
+                                      [(displayValue)]="BatchSettleForm.specName"
+                                      [searchBefore]="merchantNoSearchBefore.bind(this)"
+                                      [valueField]="'merchantNo'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="ally">{{'BatchSettle.listPage.search.ally'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="BatchSettleForm.ally" [name]="'ally'" [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      nzId="ally"
+                                      [tableCfg]="allyTableCfg"
+                                      [displayField]="'companionName'"
+                                      [valueField]="'companion'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+
+
+            <div nz-col [nzSpan]="8" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'BatchSettle.btn.searchBtn'|translate}}</span>
+                </button>
+
+                <button nz-button  (click)="onExportBtn()" *ngIf="helper.btnRole('REMITEXPORT')" [nzType]="'default'" [nzSize]="'large'">
+                    <span>{{'BatchSettle.btn.onExportBtn'|translate}}</span>
+                </button>
+
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="12" class="header-info">
+            <p class="text-grey-dark">{{'BatchSettle.listPage.Band.title1'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.totalCount | number:'0.0-2' }}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="12" class="text-center">
+            <p class="text-grey-dark">{{'BatchSettle.listPage.Band.title2'|translate}}</p>
+            <p class="display-2">{{ summaryCount?.ntTotalFee | number:'0.0-2' }}</p>
+            <em></em>
+        </div>
+    </div>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <simple-table #BatchSettleListTable [url]="tableCfg.url" [reqMehtod]="'POST'"  [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName" [isAjax]="tableCfg.isAjax">
+        <ng-template st-row="actTypeRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['actType']">
+                <span *ngSwitchCase='0' >{{helper.dictTrans('ACCOUNT_TYPE', item['actType'])}}</span>
+                <span *ngSwitchCase='1' >{{helper.dictTrans('ACCOUNT_TYPE', item['actType'])}}</span>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>
+

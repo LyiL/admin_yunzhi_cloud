@@ -1,0 +1,119 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="name">{{'Agency.listPage.search.name'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="agencyListForm.name" name="name" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="name"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="chanCode">{{'Agency.listPage.search.chanCode'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="agencyListForm.chanCode" name="chanCode" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="chanCode"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="bankCode">{{'Agency.listPage.search.bankCode'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="agencyListForm.bankCode" [name]="'bankCode'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="bankCode"
+                                      [tableCfg]="bankCodeTableCfg" [displayField]="'name'" [valueField]="'orgNo'" (nzSelect)="onBankCodeSelected($event)"></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="parentChanCode">{{'Agency.listPage.search.parentChanCode'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="agencyListForm.parentChanCode" [name]="'parentChanCode'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="parentChanCode"
+                                      [tableCfg]="parentChanCodeTableCfg" [displayField]="'name'" [valueField]="'chanCode'" [(displayValue)]="agencyListForm.parentChanName"
+                                      (nzSelect)="onParentChanSelected($event)"
+                                      [searchBefore]="onParentChanSearchBefore.bind(this)"></search-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="examState">{{'Agency.listPage.search.examState'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="examState" name="examState" [(ngModel)]="agencyListForm.examState" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option nzLabel="{{'Agency.listPage.search.all'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of examineStatus"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="appCode">{{'Agency.listPage.search.appCode'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="appCode" name="appCode" [(ngModel)]="agencyListForm.appCode" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option nzLabel="{{'Agency.listPage.search.all'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let agencyType of agencyTypes"
+                                [nzLabel]="agencyType.name"
+                                [nzValue]="agencyType.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+                <button nz-button (click)="onAddAgency()" [nzType]="'default'" [nzSize]="'large'" *ngIf="helper.btnRole('AGENTNEW')">
+                    <span>{{'Agency.listPage.btn.addBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #agencyListTable [url]="tableCfg.url" [reqMehtod]="'POST'" [extraParams]="tableCfg.params" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName" [isAjax]="tableCfg.isAjax">
+        <ng-template st-row="parentAgentNameRender" let-item>
+            {{item['parentAgentName']? item['parentAgentName'] : '/'}}
+        </ng-template>
+        <ng-template st-row="appCodeRender" let-item>
+            {{item['appCode']?helper.dictTrans('PROXY_TYPE',item['appCode']) : '/'}}
+        </ng-template>
+        <ng-template st-row="childAgentCountRender" let-item>
+            <ng-container *ngIf="!item['childAgentCount']">0</ng-container>
+            <ng-container *ngIf="item['childAgentCount']">
+                <a (click)="onSubAgent(item)" *ngIf="helper.btnRole('AGENTSUBCHANNEL')">{{item['childAgentCount']}}</a>
+                <a *ngIf="!helper.btnRole('AGENTSUBCHANNEL')">{{item['childAgentCount']}}</a>
+            </ng-container>
+        </ng-template>
+        <ng-template st-row="mchCountRender" let-item>
+            <ng-container *ngIf="!item['mchCount']">0</ng-container>
+            <ng-container *ngIf="item['mchCount']">
+                <a (click)="onSubMch(item)" *ngIf="helper.btnRole('AGENTSUBMCH')">{{item['mchCount']}}</a>
+                <a *ngIf="!helper.btnRole('AGENTSUBMCH')">{{item['mchCount']}}</a>
+            </ng-container>
+        </ng-template>
+        <ng-template st-row="examStateRender" let-item let-index="index">
+           <ng-container [ngSwitch]="item['examState']">
+               <nz-tag *ngSwitchCase="0" [nzColor]="'orange'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+               <nz-tag *ngSwitchCase="1" [nzColor]="'green'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+               <nz-tag *ngSwitchCase="2" [nzColor]="'red'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+               <nz-tag *ngSwitchCase="3" [nzColor]="'gray'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+               <nz-tag *ngSwitchCase="4" [nzColor]="'red'">{{helper.dictTrans('EXAMINE_STATUS',item['examState'])}}</nz-tag>
+           </ng-container>
+       </ng-template>
+    </simple-table>
+</nz-card>
+
+

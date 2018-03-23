@@ -1,0 +1,54 @@
+<nz-card [nzBordered]="false" nzTitle="{{'Agency.detailPage.shareProfitCfg.title'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="onAddChannel()" *ngIf="helper.btnRole('AGENTPGNEW')">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #agencyChannelTable [url]="tableCfg.url" [reqMehtod]="'POST'" [isAjax]="tableCfg.isAjax"
+                  [extraParams]="tableCfg.params" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName">
+        <ng-template st-row="categoryTypeRender" let-item>
+            {{helper.isEmpty(item['categoryType'])?'/':item["categoryType"]|dictTrans:"MCH_TYPE"}}
+        </ng-template>
+        <ng-template st-row="limitDayRender" let-item>
+            {{helper.isEmpty(item["limitDay"])?'/':item["limitDay"] | moneySpunYuanTrans}}
+        </ng-template>
+        <ng-template st-row="limitCountRender" let-item>
+            {{helper.isEmpty(item["limitSingleMin"])?'/':item["limitSingleMin"] | moneySpunYuanTrans}}-{{helper.isEmpty(item["limitSingleMax"])?'/':item["limitSingleMax"] | moneySpunYuanTrans}}
+        </ng-template>
+        <ng-template st-row="fixFloatRateRender" let-item>
+            {{helper.isEmpty(item["fixFloatRate"])?'/':item["fixFloatRate"]|dictTrans:"RATE_TYPE"}}
+        </ng-template>
+        <ng-template st-row="settleCycleRender" let-item>
+            {{helper.isEmpty(item["settleCycle"])?'/':item["settleCycle"]|dictTrans:"BALANCE_DATE"}}
+        </ng-template>
+        <ng-template st-row="shareRuleRender" let-item>
+            {{helper.isEmpty(item["chanShareRule"])?'/':item["chanShareRule"]|dictTrans:"PAYCENTER_CH_TYPE"}}
+        </ng-template>
+        <ng-template st-row="stateRender" let-item>
+            <ng-container [ngSwitch]="item['state']" *ngIf="helper.btnRole('AGCHANGERATESTATE')">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onStateClick(item['id'],item['state'])">
+                    {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                    <i class="anticon anticon-pause"></i>
+                </nz-tag>
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onStateClick(item['id'],item['state'])">
+                    {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                    <i class="anticon anticon-caret-right"></i>
+                </nz-tag>
+            </ng-container>
+            <ng-container [ngSwitch]="item['state']" *ngIf="!helper.btnRole('AGCHANGERATESTATE')">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" >
+                    {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                </nz-tag>
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'">
+                    {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                </nz-tag>
+            </ng-container>
+        </ng-template>
+
+        <!--<ng-template st-row="stateRender" let-item>-->
+            <!--<ng-container [ngSwitch]="item['state']">-->
+                <!--<nz-tag *ngSwitchCase="1" [nzColor]="'green'">{{item["state"]|dictTrans:"ENABLE_STATUS"}}</nz-tag>-->
+                <!--<nz-tag *ngSwitchCase="0" [nzColor]="'red'">{{item["state"]|dictTrans:"ENABLE_STATUS"}}</nz-tag>-->
+            <!--</ng-container>-->
+        <!--</ng-template>-->
+    </simple-table>
+</nz-card>

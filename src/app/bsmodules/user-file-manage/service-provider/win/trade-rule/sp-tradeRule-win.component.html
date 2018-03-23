@@ -1,0 +1,17 @@
+<form nz-form [formGroup]="totalRuleForm" (ngSubmit)="_submitForm()">
+    <div nz-form-item nz-row>{{attention}}</div>
+    <div nz-form-item nz-row>
+        <div nz-form-control nz-col>
+            <nz-radio-group [(ngModel)]="model.tradeId" formControlName="tradeId">
+                <label nz-radio
+                       [nzValue]="type.id"
+                       *ngFor="let type of tradeTypes" (onClick)="onRadioChecked($event)">
+                    <span>{{type.name}}</span>
+                </label>
+            </nz-radio-group>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!totalRuleForm.valid" [nzLoading]="isLoadingOne">{{'Modal.okText'|translate}}</button>
+    </div>
+</form>

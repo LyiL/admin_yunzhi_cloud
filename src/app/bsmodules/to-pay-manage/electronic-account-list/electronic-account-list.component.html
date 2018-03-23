@@ -1,0 +1,125 @@
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="18">
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="accountName">{{'cashManage.listPage.search.accountName'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="eleForm.accountName" name="accountName" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="accountName"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="useState">{{'cashManage.listPage.search.useState'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="useState" name="useState" [(ngModel)]="eleForm.useState" nzPlaceHolder="{{'RM.listPage.html.pleaseselect'|translate}}">
+                            <nz-option [nzLabel]="'StaffM.listPage.html.all'|translate">></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of startStates"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'eleAccount.listPage.search.organNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="eleForm.organNo"
+                                      [name]="'organNo'"
+                                      nzId="organNo"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'merchantNo'"
+                                      [tableCfg]="eleCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+                <button nz-button (click)="onNewAdd()" [nzType]="'default'" [nzSize]="'large'" *ngIf="helper.btnRole('EACCOUNTNEW')">
+                    <span>{{'cashManage.listPage.html.newAdd'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #eletronicAccountTable
+                  [url]="electronicAccTableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="electronicAccTableCfg.params"
+                  [columns]="electronicAccTableCfg.tableColumns"
+                  [resReName]="electronicAccTableCfg.resReName"
+                  [reqReName]="electronicAccTableCfg.reqReName"
+                  [isAjax]="electronicAccTableCfg.isAjax">
+
+        <ng-template st-row="outMchnoRender" let-item>
+            {{helper.isEmpty(item["outMchno"])?'/':item["outMchno"]}}
+        </ng-template>
+
+        <ng-template st-row="cashpoolNameRender" let-item>
+            {{helper.isEmpty(item["cashpoolName"])?'/':item["cashpoolName"]}}
+        </ng-template>
+        <ng-template st-row="useStateRender" let-item>
+            <ng-container *ngIf="helper.btnRole('EACCOUNTSTATE')"  [ngSwitch]="item['useState']">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onEnabled(item)">
+                    {{'cashManage.listPage.tableCfg.openuseState'|translate}}
+                    <i class="anticon  anticon-pause"></i>
+                </nz-tag>
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onEnabled(item)">
+                    {{'cashManage.listPage.tableCfg.closeuseState'|translate}}
+                    <i class="anticon anticon-caret-right"></i>
+                </nz-tag>
+            </ng-container>
+            <ng-container *ngIf="!helper.btnRole('EACCOUNTSTATE')" [ngSwitch]="item['useState']">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" >
+                    {{'cashManage.listPage.tableCfg.openuseState'|translate}}
+
+                </nz-tag>
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'">
+                    {{'cashManage.listPage.tableCfg.closeuseState'|translate}}
+                </nz-tag>
+            </ng-container>
+        </ng-template>
+
+        <ng-template st-row="aRender" let-item>
+            <ng-container *ngIf="helper.btnRole('EACCOUNTACCOUNTING')">
+                <a (click)="onAccountDetails(item)">{{'eleAccount.listPage.tableCfg.seeA'|translate}}</a>
+            </ng-container>
+            <ng-container *ngIf="!helper.btnRole('EACCOUNTACCOUNTING')" >/</ng-container>
+        </ng-template>
+
+        <ng-template st-row="canSettleBalanceRender" let-item>
+            {{helper.isEmpty(item["canSettleBalance"])?'0':item["canSettleBalance"]}}
+        </ng-template>
+
+        <ng-template st-row="singleProcsFeeRender" let-item let-index="index">
+            <span>{{item['singleProcsFee']}}</span><br>
+            <span>{{item['privProcsFee']}}</span> <br>
+            <span>{{item['advanceProcsFee']*100}}</span>
+
+        </ng-template>
+
+        <ng-template st-row="fRender" let-item>
+            <ng-container *ngIf="helper.btnRole('EACCOUNTALLOT')">
+                <a (click)="onDistribution(item)">{{'eleAccount.listPage.tableCfg.fbtn'|translate}}</a>
+            </ng-container>
+            <ng-container *ngIf="!helper.btnRole('EACCOUNTALLOT')" >/</ng-container>
+        </ng-template>
+
+        <ng-template st-row="bRender" let-item>
+            <ng-container *ngIf="helper.btnRole('EACCOUNTSEACH')">
+                <a (click)="onSearchMoney(item)">{{'eleAccount.listPage.tableCfg.bBtn'|translate}}</a>
+            </ng-container>
+            <ng-container *ngIf="!helper.btnRole('EACCOUNTSEACH')" >/</ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>
+

@@ -1,0 +1,30 @@
+<form nz-form [formGroup]="StatusForm" (ngSubmit)="_submitForm()">
+    <div nz-form-item nz-row [nzGutter]="16">
+        <div nz-form-label nz-col [nzSm]="3">
+            <label nz-form-item-required>{{'BatchSettle.listPage.win.status.active'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="21">
+            <nz-radio-group [(ngModel)]="model.examState" formControlName="examState">
+                <label nz-radio *ngFor="let Status of examStates" [nzValue]="Status.id " [nzChecked]="Status.id== model.examState">
+                    <span>{{Status.name}}</span>
+                </label>
+            </nz-radio-group>
+        </div>
+    </div>
+    <div nz-form-item nz-row [nzGutter]="16">
+        <div nz-form-label nz-col [nzSm]="3">
+            <label nz-form-item-required>{{'BatchSettle.listPage.win.status.statusRemark'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="21" nzHasFeedback>
+            <nz-input [(ngModel)]="model.examIllu"
+                      formControlName="examIllu"
+                      [nzType]="'textarea'"
+                      [nzRows]="'4'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+            <div nz-form-explain *ngIf="StatusForm.controls.examIllu.dirty&&StatusForm.controls.examIllu.hasError('required')">{{'Validate_bank.modifyCause'|translate}}</div>
+        </div>
+    </div>
+    <div  class="modal-footer">
+        <button nz-button [nzType]="'primary'" [disabled]="!StatusForm.valid" [nzLoading]="isLoadingOne">{{'default.btn.saveBtn'|translate}}</button>
+    </div>
+</form>

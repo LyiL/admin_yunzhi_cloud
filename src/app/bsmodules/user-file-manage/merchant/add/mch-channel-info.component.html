@@ -1,0 +1,71 @@
+<nz-card [nzBordered]="false" nzTitle="{{'Mch.step.channelInfo.title'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="addChannel()">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #mchChannelTable [url]="tableCfg.url" [reqMehtod]="'POST'"
+                  [isAjax]="tableCfg.isAjax" [preDataChange]="tableCfg.preDataChange"
+                  [extraParams]="tableCfg.params" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName">
+        <ng-template st-row="providerNoRender" let-item>
+            {{!helper.isEmpty(item['providerNo'])?item['providerNo'] : '/'}}
+        </ng-template>
+        <ng-template st-row="allyRender" let-item>
+            {{!helper.isEmpty(item['ally'])?item['ally'] : '/'}}
+        </ng-template>
+        <ng-template st-row="thirdAppidRender" let-item>
+            {{!helper.isEmpty(item['thirdAppid'])?item['thirdAppid'] : '/'}}
+        </ng-template>
+        <ng-template st-row="pcmPartkeyRender" let-item>
+            {{!helper.isEmpty(item['pcmPartkey'])?item['pcmPartkey'] : '/'}}
+        </ng-template>
+    </simple-table>
+</nz-card>
+
+<nz-card [nzBordered]="false" nzTitle="{{'SP.detailPage.tradeRuleCfg.title'|translate}}" class="ng-card-m"     *ngIf="helper.btnRole('MCHDEPLOYROUTING')">
+    <desc-list size="large" class="mb-lg" col="1">
+        <desc-list-item term="{{'SP.detailPage.tradeRuleCfg.detail.ruleState'|translate}}">
+            <!--没有数据默认为启用-->
+            <ng-template #tradeRuleEmpty>
+                <nz-tag [nzColor]="'green'" (click)="onChangeTradeRule(tradeRuleData)">
+                    {{helper.dictTrans('ENABLE_STATUS', 1)}}
+                    <i class="anticon anticon-pause"></i>
+                </nz-tag>
+            </ng-template>
+
+            <ng-container *ngIf="!helper.isEmpty(tradeRuleData); else tradeRuleEmpty">
+                <ng-container [ngSwitch]="tradeRuleData['ruleState']">
+                    <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onChangeTradeRule(tradeRuleData)">
+                        {{helper.dictTrans('ENABLE_STATUS', tradeRuleData['ruleState'])}}
+                        <i class="anticon anticon-caret-right"></i>
+                    </nz-tag>
+                    <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onChangeTradeRule(tradeRuleData)">
+                        {{helper.dictTrans('ENABLE_STATUS', tradeRuleData['ruleState'])}}
+                        <i class="anticon anticon-pause"></i>
+                    </nz-tag>
+                </ng-container>
+            </ng-container>
+        </desc-list-item>
+
+        <desc-list-item term="{{'SP.detailPage.tradeRuleCfg.detail.tradeType'|translate}}">
+            <ng-container *ngIf="!helper.isEmpty(tradeRuleData);else tradeTypeEmpty">
+                <ng-container *ngIf="!helper.isEmpty(tradeRuleData['tradeType']);else tradeTypeEmpty">
+                    {{tradeRuleData['tradeType']}}
+                </ng-container>
+            </ng-container>
+            <ng-template #tradeTypeEmpty>--</ng-template>
+        </desc-list-item>
+    </desc-list>
+</nz-card>
+
+
+    <div nz-row class="wrap-btn">
+        <nz-button-group>
+            <button nz-button [nzType]="'default'" nzSize="large" (click)="onPrev()" >
+                <span>{{'default.btn.backToBtn'|translate}}</span>
+            </button>
+            <button nz-button [nzType]="'primary'" (click)="onSubmit()" nzSize="large" [nzLoading]="isLoadingOne" [disabled]="!hasData()" >
+                <span>{{'default.btn.saveToNextBtn'|translate}}</span>
+            </button>
+        </nz-button-group>
+    </div>
+

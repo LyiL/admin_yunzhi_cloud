@@ -1,0 +1,168 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccTask.listPage.search.dateTitle'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="searchStartTime"
+                                       [(ngModel)]="checkAccountForm.searchStartTime"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       nzId="searchStartTime"
+                                       nzPlaceHolder="{{'CheckAccount.listPage.search.searchStartTime'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split"> {{line}} </p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="searchEndTime"
+                                       [(ngModel)]="checkAccountForm.searchEndTime"
+                                       nzId="searchEndTime"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       [nzDisabledDate]="endDateDisabled.bind(this)"
+                                       nzPlaceHolder="{{'CheckAccount.listPage.search.searchEndTime'|translate}}"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="ally">{{'CheckAccount.listPage.search.ally'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="checkAccountForm.ally" [name]="'ally'" nzId="ally" [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                      [displayField]="'companionName'"
+                                      [valueField]="'companion'"
+                                      [tableCfg]="allyCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'CheckAccount.listPage.search.reconState' | translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzAllowClear
+                                   nzId="reconState"
+                                   name="reconState"
+                                   [(ngModel)]="checkAccountForm.reconState"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose' | translate}}">
+                            <nz-option nzLabel="{{'AccountManage.common.all' | translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of reconState"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+            </div>
+
+        </div>
+    </form>
+</nz-card>
+
+<nz-card [nzBordered]="true">
+    <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'CheckAccount.listPage.count.totalQua' | translate}}</p>
+            <p class="display-2">{{checkAccCount?.totalQua}}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'CheckAccount.listPage.count.totalFee' | translate}}</p>
+            <p class="display-2">{{checkAccCount?.totalFee | number: '0.0-6'}}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'CheckAccount.listPage.count.refundQua' | translate}}</p>
+            <p class="display-2">{{checkAccCount?.refundQua}}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'CheckAccount.listPage.count.refundFee' | translate}}</p>
+            <p class="display-2">{{checkAccCount?.refundFee | number: '0.0-6'}}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="header-info">
+            <p class="text-grey-dark">{{'CheckAccount.listPage.count.errTotalQua' | translate}}</p>
+            <p class="display-2">{{checkAccCount?.errTotalQua}}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="4" class="text-center">
+            <p class="text-grey-dark">{{'CheckAccount.listPage.count.errTotalFee' | translate}}</p>
+            <p class="display-2">{{checkAccCount?.errTotalFee | number: '0.0-6'}}</p>
+            <em></em>
+        </div>
+    </div>
+</nz-card>
+
+<nz-card [nzBordered]="false">
+    <simple-table #checkAccountTable [url]="tableCfg.url" [reqMehtod]="'POST'"
+                  [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName"
+                  [isAjax]="tableCfg.isAjax">
+
+        <!-- 对账日期 <br/> 结算账户 -->
+        <ng-template st-row="reconDayRender" let-item>
+            <span>{{item['reconDay'] | date: 'yyyy-MM-dd'}}</span> <br> <span>{{!helper.isEmpty(item['ally']) ? item['ally'] : '/'}}</span>
+        </ng-template>
+
+        <!-- 交易金额（元）<br/>退款金额（元） -->
+        <ng-template st-row="totalFeeRender" let-item>
+            <span>{{item['totalFee'] | number: '0.0-6'}}</span> <br> <span>{{item['refundFee'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <!-- 交易笔数（笔）<br/>退款笔数（笔) -->
+        <ng-template st-row="totalQuaRender" let-item>
+            <span>{{item['totalQua']}}</span> <br> <span>{{item['refundQua']}}</span>
+        </ng-template>
+
+        <!-- 异常笔数（笔）<br/>异常金额（元) -->
+        <ng-template st-row="errTotalQuaRender" let-item>
+            <!-- 异常笔数加上异常退款笔数 <br/>  异常金额加上异常退款金额 -->
+            <span>{{item['errTotalQua'] + item['errRefundQua']}}</span> <br> <span>{{(((item['errTotalFee'] * 100) + (item['errRefundFee'] * 100)) / 100) | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <!-- 平账交易（元）<br/>平账退款（元） -->
+        <ng-template st-row="eqTotalFeeRender" let-item>
+            <span>{{item['eqTotalFee'] | number: '0.0-6'}}</span> <br> <span>{{item['eqRefundFee'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <!-- 手续费（元）<br/>退款手续费（元） -->
+        <ng-template st-row="poundage2Render" let-item>
+            <span>{{item['poundage2'] | number: '0.0-6'}}</span> <br> <span>{{item['refundPodg2'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <!-- 第三方交易（元）<br/>第三方退款（元） -->
+        <ng-template st-row="trdTotalFeeRender" let-item>
+            <span>{{item['trdTotalFee'] | number: '0.0-6'}}</span> <br> <span>{{item['trdRefundFee'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <!-- 第三方手续费（元）<br/>第三方退款手续费（元） -->
+        <ng-template st-row="trdPodgRender" let-item>
+            <span>{{item['trdPodg'] | number: '0.0-6'}}</span> <br> <span>{{item['trdFavRefundFee'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <!-- 对账状态 -->
+        <ng-template st-row="reconStateRender" let-item let-index="index">
+            <ng-template #isEmptyValue> / </ng-template>
+            <ng-container [ngSwitch]="item['reconState']" *ngIf="!helper.isEmpty(item['reconState']); else isEmptyValue">
+                <nz-tag *ngSwitchCase='0' [nzColor]="'green'">{{helper.dictTrans('PARTNER_PRCSTATUS', item['reconState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='1' [nzColor]="'red'">{{helper.dictTrans('PARTNER_PRCSTATUS', item['reconState'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+
+    </simple-table>
+</nz-card>

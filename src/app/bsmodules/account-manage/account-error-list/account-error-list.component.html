@@ -1,0 +1,181 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+
+        <div nz-row [nzGutter]="8">
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccError.listPage.search.dateTitle'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="checkTimeStart"
+                                       [(ngModel)]="errorForm.checkTimeStart"
+                                       nzId="checkTimeStart"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       nzPlaceHolder="{{'AccError.listPage.search.checkTimeStart'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split"> {{line}} </p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="checkTimeEnd"
+                                       [(ngModel)]="errorForm.checkTimeEnd"
+                                       nzId="checkTimeEnd"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       [nzDisabledDate]="checkTimeEndDateDisabled.bind(this)"
+                                       nzPlaceHolder="{{'AccError.listPage.search.checkTimeEnd'|translate}}"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccError.listPage.search.partner'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="errorForm.partner"
+                                      [name]="'partner'"
+                                      [nzSize]="'large'"
+
+                                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                      [displayField]="'companionName'"
+                                      [valueField]="'companion'"
+                                      [tableCfg]="partnerTableCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'AccError.listPage.search.handleState'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzAllowClear
+                                   nzId="handleState"
+                                   name="handleState"
+                                   [(ngModel)]="errorForm.handleState"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option nzLabel="{{'SP.hint.all'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of handleState"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md" *ngIf="flag">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="orderNo">{{'AccError.listPage.search.orderNo'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="errorForm.orderNo"
+                                  name="orderNo"
+                                  nzId="orderNo"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md" *ngIf="flag">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label
+                        for="transactionId">{{'AccError.listPage.search.transactionId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="errorForm.transactionId"
+                                  name="transactionId"
+                                  nzId="transactionId"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md" *ngIf="flag">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="refundNo">{{'AccError.listPage.search.refundNo'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="errorForm.refundNo"
+                                  name="refundNo"
+                                  nzId="refundNo"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md" *ngIf="flag">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="refundId">{{'AccError.listPage.search.refundId'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="errorForm.refundId"
+                                  name="refundId"
+                                  nzId="refundId"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+                <!--<button nz-button (click)="flag = !flag" [nzType]="'default'" [nzSize]="'large'">-->
+                <!--<span>{{flag ? ('AccError.listPage.search.hideBtn'|translate) : ('AccError.listPage.search.showBtn'|translate)}}</span>-->
+                <!--</button>-->
+                <a (click)="flag = !flag" style="margin-left:8px">
+                    {{flag ? ('AccError.listPage.search.hideBtn'|translate) : ('AccError.listPage.search.showBtn'|translate)}}
+                    <i class="anticon" [class.anticon-down]="!flag" [class.anticon-up]="flag"></i>
+                </a>
+            </div>
+
+        </div>
+
+    </form>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <simple-table #errorTable [url]="tableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="tableCfg.params"
+                  [total]="tableCfg.total"
+                  [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName"
+                  [reqReName]="tableCfg.reqReName"
+                  [isAjax]="tableCfg.isAjax">
+
+        <ng-template st-row="reconDayRender" let-item>
+            <span>{{item['reconDay'] | date: 'yyyy-MM-dd'}}</span> <br> <span>{{!helper.isEmpty(item['partner']) ? item['partner'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="merchantNameRender" let-item>
+            <span>{{!helper.isEmpty(item['merchantName']) ? item['merchantName'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="totalFeeRender" let-item>
+            <span>{{item['totalFee'] | number: '0.0-6'}}</span> <br> <span>{{item['refundFee'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <ng-template st-row="orderNoRender" let-item>
+            <span>{{item['orderNo']}}</span> <br> <span>{{!helper.isEmpty(item['refundNo']) ? item['refundNo'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="transactionIdRender" let-item>
+            <span>{{item['transactionId']}}</span> <br> <span>{{!helper.isEmpty(item['refundId']) ? item['refundId'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="handleStateRender" let-item let-index="index">
+            <ng-template #isEmptyValue> / </ng-template>
+            <ng-container [ngSwitch]="item['handleState']" *ngIf="!helper.isEmpty(item['handleState']); else isEmptyValue">
+                <nz-tag *ngSwitchCase='0' [nzColor]="'orange'">{{helper.dictTrans('CHECKERROR_PRCSTATUS', item['handleState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='1' [nzColor]="'green'">{{helper.dictTrans('CHECKERROR_PRCSTATUS', item['handleState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='2' [nzColor]="'green'">{{helper.dictTrans('CHECKERROR_PRCSTATUS', item['handleState'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>

@@ -1,0 +1,71 @@
+<!--<pro-header></pro-header>-->
+<form nz-form [formGroup]="accountTaskFormGroup" (ngSubmit)="onSubmit()">
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label for="reconPath">{{'AccTask.win.editTask.reconPath'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16">
+            <nz-input [(ngModel)]="model.reconPath"
+                      name="reconPath"
+                      nzId="reconPath"
+                      [nzSize]="'large'"
+                      formControlName="reconPath"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+        </div>
+    </div>
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label nz-form-item-required>{{'AccTask.win.editTask.reconType'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16" nzHasFeedback>
+            <nz-select nzAllowClear
+                       nzId="reconType"
+                       name="reconType"
+                       [(ngModel)]="model.reconType"
+                       formControlName="reconType"
+                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                <nz-option
+                    *ngFor="let type of reconTypes"
+                    [nzLabel]="type.name"
+                    [nzValue]="type.id">
+                </nz-option>
+            </nz-select>
+            <div nz-form-explain *ngIf="getFormControl('reconType').dirty&&getFormControl('reconType').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label nz-form-item-required>{{'AccTask.win.editTask.refundType'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16" nzHasFeedback>
+            <nz-select nzAllowClear
+                       nzId="refundType"
+                       name="refundType"
+                       [(ngModel)]="model.refundType"
+                       formControlName="refundType"
+                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                <nz-option
+                    *ngFor="let type of refundTypes"
+                    [nzLabel]="type.name"
+                    [nzValue]="type.id">
+                </nz-option>
+            </nz-select>
+            <div nz-form-explain *ngIf="getFormControl('refundType').dirty&&getFormControl('refundType').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div nz-form-control>
+            <button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!(accountTaskFormGroup.valid)">
+                {{'default.btn.saveBtn'|translate}}
+            </button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,426 @@
+
+    <form nz-form [formGroup]="modelGroup" (ngSubmit)="_submitForm()" class="padding-form">
+        <!--企业信息-->
+        <fieldset>
+            <legend>{{'Mch.step.baseInfo.legTitle.companyInfo'|translate}}</legend>
+            <div nz-row [nzGutter]="50" [nzType]="'flex'" [nzJustify]="'space-between'">
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6">
+                            <label for="bankNo" nz-form-item-required>{{'Mch.listPage.search.bankNo'|translate}}</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="18" >
+                            <search-input [(ngModel)]="model.bankNo" [name]="'bankNo'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="bankNo"
+                                          [tableCfg]="agencyCodeCfg"   formControlName="bankNo"
+                                          (nzSelect)="agencyCodesearchSelected($event)"
+                                          [nzDisabled]="model.id"
+                                          [(displayValue)]="model.bankName"
+                                          [displayField]="'name'"
+                                          [valueField]="'orgNo'"
+                            ></search-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6">
+                            <label for="chanNo">{{'Mch.step.baseInfo.model.chanNo'|translate}}</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="18" >
+                            <search-input [(ngModel)]="model.chanNo"
+                                          formControlName="chanNo"
+                                          (nzSelect)="onChanNOSelected($event)"
+                                          [searchBefore]="ChanNosearchBefore.bind(this)"
+                                          [nzDisabled]="model.id"
+                                          [name]="'chanNo'" [nzSize]="'large'"
+                                          nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="chanNo"
+                                          [tableCfg]="chanNoTableCfg"
+                                          [(displayValue)]="model.chanName"
+                                          [displayField]="'name'"
+                                          [valueField]="'chanCode'"
+                            ></search-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6">
+                            <label for="name" nz-form-item-required>{{'Mch.step.baseInfo.model.name'|translate}}</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.name" name="name"      formControlName="name"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="name"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="shortName" nz-form-item-required>{{'Mch.step.baseInfo.model.shortName'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.shortName" name="shortName"   formControlName="shortName"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="shortName"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('shortName').dirty&&getFormControl('shortName').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="orgEmail" nz-form-item-required>{{'Mch.step.baseInfo.model.orgEmail'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.orgEmail" name="orgEmail"      formControlName="orgEmail"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInputEmail'|translate}}" nzId="orgEmail"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('orgEmail').dirty&&getFormControl('orgEmail').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                            <div nz-form-explain *ngIf="getFormControl('orgEmail').dirty&&getFormControl('orgEmail').value&&getFormControl('orgEmail').hasError('email')">{{'default.validationMessages.emailErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="orgWebsite" nz-form-item-required>{{'Mch.step.baseInfo.model.orgWebsite'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.orgWebsite" name="orgWebsite"   formControlName="orgWebsite"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="orgWebsite"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('orgWebsite').dirty&&getFormControl('orgWebsite').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <!--地址-->
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="province" nz-form-item-required>{{'Mch.step.baseInfo.model.Address'|translate}}</label></div>
+                        <div nz-form-control  nz-col [nzSpan]="6" nzHasFeedback>
+                            <nz-select nzId="province" name="province" [(ngModel)]="model.province"  (nzSelectChange)="onProvinceSelected($event)"  formControlName="province"
+                                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                <nz-option
+                                    *ngFor="let pro of provinces | async"
+                                    [nzData]="pro.adCode"
+                                    [nzLabel]="pro.name"
+                                    [nzValue]="pro.areaCode">
+                                </nz-option>
+                            </nz-select>
+                        </div>
+                        <div nz-form-control  nz-col [nzSpan]="6" nzHasFeedback>
+                            <nz-select nzId="city" name="city" [(ngModel)]="model.city"   (nzSelectChange)="onCitySelected($event)" formControlName="city"
+                                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                <nz-option
+                                    *ngFor="let city of citys | async"
+                                    [nzLabel]="city.name"
+                                    [nzValue]="city.areaCode"
+                                    [nzData]="city.adCode"
+                                >
+                                </nz-option>
+                            </nz-select>
+                            <div nz-form-explain *ngIf="getFormControl('city').dirty&&getFormControl('city').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+
+                        </div>
+                        <div nz-form-control  nz-col [nzSpan]="6" nzHasFeedback>
+                            <nz-select nzId="county" name="county" [(ngModel)]="model.county"  (nzSelectChange)="onAreasSelected($event)"  formControlName="county"
+                                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                <nz-option
+                                    *ngFor="let area of areas | async"
+                                    [nzData]="area.adCode"
+                                    [nzLabel]="area.name"
+                                    [nzValue]="area.areaCode">
+                                </nz-option>
+                            </nz-select>
+                            <div nz-form-explain *ngIf="getFormControl('county').dirty&&getFormControl('county').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6">
+                            <label for="comAddress" nz-form-item-required>{{'Mch.step.baseInfo.model.comAddress'|translate}}</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.comAddress" name="comAddress"  formControlName="comAddress"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="comAddress"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('comAddress').dirty&&getFormControl('comAddress').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="certificateType" nz-form-item-required>{{'Mch.step.baseInfo.model.certificateType'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-select nzId="certificateType" name="certificateType" [(ngModel)]="model.certificateType" formControlName="certificateType"
+                                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                <nz-option
+                                    *ngFor="let certType of certificateTypes | async"
+                                    [nzLabel]="certType.name"
+                                    [nzValue]="certType.id">
+                                </nz-option>
+                            </nz-select>
+                            <div nz-form-explain *ngIf="getFormControl('certificateType').dirty&&getFormControl('certificateType').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="linenceNo" nz-form-item-required>{{'Mch.step.baseInfo.model.linenceNo'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.linenceNo" name="linenceNo"   formControlName="linenceNo"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="linenceNo"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('linenceNo').dirty&&getFormControl('linenceNo').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label>{{'Agency.detailPage.detail.info.linenceTermStart'|translate}}</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="8">
+                            <nz-datepicker [nzSize]="'large'" style="width: 100%"
+                                           name="linenceTermStart"
+                                           [(ngModel)]="model.linenceTermStart"
+                                           [nzFormat]="'YYYY-MM-DD'"
+                                           nzId="linenceTermStart"
+                                           (ngModelChange)="termStartChange($event)"
+                                           nzPlaceHolder="{{'Agency.detailPage.detail.info.startDate'|translate}}"
+                                           formControlName="linenceTermStart"></nz-datepicker>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="2">
+                            <p nz-form-split style="line-height: 28px; padding:0 10px;"> {{line}} </p>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="8">
+                            <nz-datepicker [nzSize]="'large'" style="width: 100%"
+                                           name="linenceTermEnd"
+                                           [(ngModel)]="model.linenceTermEnd"
+                                           nzId="linenceTermEnd"
+                                           [nzFormat]="'YYYY-MM-DD'"
+                                           (ngModelChange)="TermEndChange($event)"
+                                           nzPlaceHolder="{{'Agency.detailPage.detail.info.endDate'|translate}}"
+                                           formControlName="linenceTermEnd"></nz-datepicker>
+                            <!--[nzDisabledDate]="EndDateDisabled.bind(this)"-->
+
+                        </div>
+                    </div>
+                </div>
+                <!--所属行业-->
+                <div nz-col [nzSpan]="12">
+
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="mchRole" nz-form-item-required>{{'Mch.step.baseInfo.model.categoryTypeGroup'|translate}}</label></div>
+                        <div nz-form-control  nz-col [nzSpan]="6" nzHasFeedback>
+                            <nz-select nzId="mchRole" name="mchRole" [(ngModel)]="model.mchRole" formControlName="mchRole"
+                                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                <nz-option
+                                    *ngFor="let mchRole of mchRole"
+                                    [nzLabel]="mchRole.name"
+                                    [nzValue]="mchRole.id">
+                                </nz-option>
+                            </nz-select>
+                        </div>
+                        <div nz-form-control  nz-col [nzSpan]="6" nzHasFeedback>
+                            <nz-select nzId="categoryTypeGroup" name="categoryTypeGroup" [(ngModel)]="model.categoryTypeGroup"   (nzSelectChange)="onCategoryTypeSelected($event)" formControlName="categoryTypeGroup"
+                                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                <nz-option
+                                    *ngFor="let cTypeGroup of cTypeGroups | async"
+                                    [nzLabel]="cTypeGroup.name"
+                                    [nzValue]="cTypeGroup.id"
+                                >
+
+                                </nz-option>
+                            </nz-select>
+                            <div nz-form-explain *ngIf="getFormControl('categoryTypeGroup').dirty&&getFormControl('categoryTypeGroup').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+
+                        </div>
+                        <div nz-form-control  nz-col [nzSpan]="6" nzHasFeedback>
+                            <nz-select nzId="categoryType" name="categoryType" [(ngModel)]="model.categoryType" formControlName="categoryType"
+                                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                <nz-option
+                                    *ngFor="let cType of categoryTypes | async"
+                                    [nzLabel]="cType.name"
+                                    [nzValue]="cType.categoryNo">
+                                </nz-option>
+                            </nz-select>
+                            <div nz-form-explain *ngIf="getFormControl('categoryType').dirty&&getFormControl('categoryType').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="customerPhone" nz-form-item-required>{{'Mch.step.baseInfo.model.customerPhone'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.customerPhone" name="customerPhone"   formControlName="customerPhone"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInputFixPhone'|translate}}" nzId="customerPhone"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('customerPhone').dirty&&getFormControl('customerPhone').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                            <div nz-form-explain *ngIf="getFormControl('customerPhone').dirty&&getFormControl('customerPhone').value&&getFormControl('customerPhone').hasError('fixPhoneError')">{{'default.validationMessages.fixPhoneErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <!--所属业务员-->
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="creator">{{'Mch.step.baseInfo.model.creator'|translate}}</label></div>
+                    <div nz-form-control nz-col [nzSpan]="18" >
+                    <search-input [(ngModel)]="model.creator"
+                     formControlName="creator"
+                         [name]="'creator'" [nzSize]="'large'"
+                            nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="creator"
+                            [tableCfg]="creatorTableCfg"
+                                  [searchBefore]="searchBefore.bind(this)"
+                                  [(displayValue)]="model.salesmanName"
+                                  [nzDisabled]="(!model['chanNo']) && (model['id'])"
+                                  (nzSelect)="onCreatorSelected($event)"
+                            [displayField]="'realName'"
+                        [valueField]="'salesmanId'"
+
+                    ></search-input>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <!--负责人信息-->
+        <fieldset>
+            <legend>{{'Mch.step.baseInfo.legTitle.operatorInfo'|translate}}</legend>
+            <div nz-row [nzGutter]="40" [nzType]="'flex'" [nzJustify]="'space-between'">
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="operator" nz-form-item-required>{{'Mch.step.baseInfo.model.operator'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.operator" name="operator"      formControlName="operator"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="operator"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('operator').dirty&&getFormControl('operator').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="contactsType" nz-form-item-required>{{'Mch.step.baseInfo.model.contactsType'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-select nzId="contactsType" name="contactsType" [(ngModel)]="model.contactsType" formControlName="contactsType"
+                                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                <nz-option
+                                    *ngFor="let contactsType of contactsTypes | async"
+                                    [nzLabel]="contactsType.name"
+                                    [nzValue]="contactsType.id">
+                                </nz-option>
+                            </nz-select>
+                            <div nz-form-explain *ngIf="getFormControl('contactsType').dirty&&getFormControl('contactsType').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="operatorIdno" nz-form-item-required>{{'Mch.step.baseInfo.model.operatorIdno'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.operatorIdno" name="operatorIdno"   formControlName="operatorIdno"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInputIDcard'|translate}}" nzId="operatorIdno"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('operatorIdno').dirty&&getFormControl('operatorIdno').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                            <div nz-form-explain *ngIf="getFormControl('operatorIdno').dirty&&getFormControl('operatorIdno').value&&getFormControl('operatorIdno').hasError('IDcardError')">{{'default.validationMessages.idCardErr'|translate}}</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="operatorPhone" >{{'Mch.step.baseInfo.model.operatorPhone'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" >
+                            <nz-input [(ngModel)]="model.operatorPhone" name="operatorPhone"      formControlName="operatorPhone"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInputPhone'|translate}}" nzId="operatorPhone"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('operatorPhone').dirty&&getFormControl('operatorPhone').value&&getFormControl('operatorPhone').hasError('phoneError')">{{'default.validationMessages.phoneErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="operatorEmail" >{{'Mch.step.baseInfo.model.operatorEmail'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" >
+                            <nz-input [(ngModel)]="model.operatorEmail" name="operatorEmail"   formControlName="operatorEmail"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInputEmail'|translate}}" nzId="operatorEmail"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('operatorEmail').dirty&&getFormControl('operatorEmail').value&&getFormControl('operatorEmail').hasError('emailError')">{{'default.validationMessages.emailErr'|translate}}</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+
+        <!--联系人信息-->
+        <fieldset>
+            <legend>{{'Mch.step.baseInfo.legTitle.linkmanInfo'|translate}}</legend>
+            <div nz-row [nzGutter]="40">
+                <div nz-col [nzSpan]="12">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="linkman" nz-form-item-required>{{'Mch.step.baseInfo.model.linkman'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.linkman" name="linkman"      formControlName="linkman"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="linkman"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('linkman').dirty&&getFormControl('linkman').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="email" nz-form-item-required>{{'Mch.step.baseInfo.model.email'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.email" name="email"   formControlName="email"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInputEmail'|translate}}" nzId="email"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('email').dirty&&getFormControl('email').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                            <div nz-form-explain *ngIf="getFormControl('email').dirty&&getFormControl('email').value&&getFormControl('email').hasError('email')">{{'default.validationMessages.emailErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="12" >
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col  [nzSpan]="6"><label for="phone" nz-form-item-required>{{'Mch.step.baseInfo.model.phone'|translate}}</label></div>
+                        <div nz-form-control nz-col [nzSpan]="18" nzHasFeedback>
+                            <nz-input [(ngModel)]="model.phone" name="phone"   formControlName="phone"
+                                      [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInputPhone'|translate}}" nzId="phone"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('phone').dirty&&getFormControl('phone').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                            <div nz-form-explain *ngIf="getFormControl('phone').dirty&&getFormControl('phone').value&&getFormControl('phone').hasError('phoneError')">{{'default.validationMessages.phoneErr'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+
+        <!--附件信息-->
+        <fieldset>
+            <legend>{{'Mch.step.baseInfo.legTitle.otherInfo'|translate}}</legend>
+            <div nz-row [nzGutter]="40">
+                <div nz-form-label nz-col [nzSpan]="3">
+                    <label nz-form-item-required>{{'Mch.step.baseInfo.legTitle.image'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="21">
+                    <div nz-row [nzType]="'flex'" [nzJustify]="'space-between'">
+                        <ng-file-upload [options]="defFieldUploadSetting" placeholder="{{'Agency.detailPage.detail.info.linenceImg'|translate}}" required
+                                        id="linenceImg" name="linenceImg" formControlName="linenceImg" [(ngModel)]="model.linenceImg" (onError)="onFileUploadError($event)"></ng-file-upload>
+                        <ng-file-upload [options]="defFieldUploadSetting" placeholder="{{'Agency.detailPage.detail.info.orgAccountImg'|translate}}" required
+                                        id="orgAccountImg" name="orgAccountImg" formControlName="orgAccountImg" [(ngModel)]="model.orgAccountImg" (onError)="onFileUploadError($event)"></ng-file-upload>
+                        <ng-file-upload [options]="defFieldUploadSetting" placeholder="{{'Agency.detailPage.detail.info.indentityImg'|translate}}" required
+                                        id="indentityImg" name="indentityImg" formControlName="indentityImg" [(ngModel)]="model.indentityImg" (onError)="onFileUploadError($event)"></ng-file-upload>
+                        <ng-file-upload [options]="defFieldUploadSetting" placeholder="{{'Agency.detailPage.detail.info.indentityBackImg'|translate}}" required
+                                        id="indentityBackImg" name="indentityBackImg" formControlName="indentityBackImg" [(ngModel)]="model.indentityBackImg" (onError)="onFileUploadError($event)"></ng-file-upload>
+                        <ng-file-upload [options]="defFieldUploadSetting" placeholder="{{'Agency.detailPage.detail.info.bankCardImg'|translate}}" required
+                                        id="bankCardImg" name="bankCardImg" formControlName="bankCardImg" [(ngModel)]="model.bankCardImg" (onError)="onFileUploadError($event)"></ng-file-upload>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <div nz-row class="wrap-btn">
+            <div *ngIf="hasSource()">
+                <button nz-button [nzType]="'primary'" [nzLoading]="isLoadingOne" nzSize="large" [disabled]="!modelGroup.valid">{{'default.btn.saveToNextBtn'|translate}}</button>
+            </div>
+            <nz-button-group *ngIf="!hasSource()">
+                <button nz-button [nzType]="'default'" nzSize="large" (click)="onGoBack()" >
+                    <span>{{'default.btn.backBtn'|translate}}</span>
+                </button>
+                <button nz-button [nzType]="'primary'" [disabled]="!modelGroup.valid" [nzLoading]="isLoadingOne"  nzSize="large"  >
+                    <span>{{'default.btn.saveBtn'|translate}}</span>
+                </button>
+            </nz-button-group>
+        </div>
+    </form>
+

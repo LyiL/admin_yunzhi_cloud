@@ -1,0 +1,120 @@
+<form nz-form [formGroup]="Addintopieces" (ngSubmit)="onSubmit($event)">
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label nz-form-item-required>{{'IntoPieces.listPage.addWin.merchantId'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16">
+            <search-input [(ngModel)]="model.merchantId"
+                          [name]="'merchantId'"
+                          nzId="merchantId"
+                          [nzSize]="'large'"
+                          formControlName="merchantId"
+                          nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                          [displayField]="'name'"
+                          [valueField]="'merchantNo'"
+                          [tableCfg]="merchantCfg"
+                          (nzSelect)="merChantSelect($event)"></search-input>
+            <div nz-form-explain *ngIf="getFormControl('merchantId').dirty&&getFormControl('merchantId').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label nz-form-item-required>{{'IntoPieces.listPage.addWin.agencyName' | translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16" >
+            <search-input nzAllowClear
+                          [(ngModel)]="model.agencyName"
+                          [name]="'agencyCode'"
+                          nzId="agencyCode"
+                          [nzSize]="'large'"
+                          formControlName="agencyCode"
+                          nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                          [displayField]="'name'"
+                          [valueField]="'orgNo'"
+                          [(displayValue)]="model.agencyName"
+                          (nzSelect)="agencySelect($event)"
+                          [tableCfg]="agencyCodeCfg"></search-input>
+            <div nz-form-explain *ngIf="getFormControl('agencyCode').dirty&&getFormControl('agencyCode').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label nz-form-item-required>{{'IntoPieces.listPage.addWin.transId'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16" nzHasFeedback>
+            <nz-select nzAllowClear
+                       nzId="transId"
+                       name="transId"
+                       [(ngModel)]="model.transId"
+                       formControlName="transId"
+                       nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                       (nzSelectChange)="paySelect($event)">
+                <nz-option
+                    *ngFor="let payType of payTypes"
+                    [nzLabel]="payType.transType"
+                    [nzValue]="payType.transId">
+                </nz-option>
+            </nz-select>
+            <div nz-form-explain *ngIf="getFormControl('transId').dirty&&getFormControl('transId').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label nz-form-item-required>{{'IntoPieces.listPage.addWin.ptCenterId'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16" >
+            <search-input nzAllowClear
+                          [(ngModel)]="model.ptCenterId"
+                          [name]="'ptCenterId'"
+                          nzId="ptCenterId"
+                          [nzSize]="'large'"
+                          formControlName="ptCenterId"
+                          nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                          [displayField]="'name'"
+                          [valueField]="'id'"
+                          [(displayValue)]="model.ptCenterName"
+                          [searchBefore]="onSearchBefore.bind(this)"
+                          [tableCfg]="ptCenterCfg"></search-input>
+            <div nz-form-explain *ngIf="getFormControl('ptCenterId').dirty&&getFormControl('ptCenterId').hasError('required')">
+                {{'default.validationMessages.emptyErr'|translate}}
+            </div>
+        </div>
+    </div>
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label for="providerNo">{{'IntoPieces.listPage.addWin.providerNo'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16">
+            <nz-input [(ngModel)]="model.providerNo"
+                      name="providerNo"
+                      nzId="providerNo"
+                      formControlName="providerNo"
+                      [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div nz-form-control>
+            <button nz-button
+                    [nzSize]="'large'"
+                    [nzType]="'primary'"
+                    [disabled]="!Addintopieces.valid"
+                    [nzLoading]="isLoad">
+                    {{'IntoPieces.listPage.addWin.saveBtn'|translate}}
+            </button>
+        </div>
+    </div>
+
+</form>

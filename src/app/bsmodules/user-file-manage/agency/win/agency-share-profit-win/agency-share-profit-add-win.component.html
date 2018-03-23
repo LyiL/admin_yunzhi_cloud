@@ -1,0 +1,167 @@
+<form nz-form [formGroup]="agencyChannelForm" (ngSubmit)="onSave()">
+    <div nz-row [nzType]="'flex'" [nzJustify]="'space-between'">
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label  nz-col  [nzSpan]="8">
+                    <label for="transId" nz-form-item-required>{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.transType'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="16" nzHasFeedback>
+                    <nz-select nzId="transId" name="transId" [(ngModel)]="model.transId" formControlName="transId" [nzSize]="'large'" [nzDisabled]="isEditDisabled" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" (nzSelectChange)="onChangeTransId($event)">
+                        <nz-option
+                            *ngFor="let payType of payTypes | async"
+                            [nzLabel]="payType.transType"
+                            [nzValue]="payType.transId"
+                            [nzData]="payType">
+                        </nz-option>
+                    </nz-select>
+                    <div nz-form-explain *ngIf="getFormControl('transId').dirty&&getFormControl('transId').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                </div>
+            </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label  nz-col  [nzSpan]="8">
+                    <label for="categoryType" nz-form-item-required>{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.categoryType'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="16" nzHasFeedback>
+                    <nz-select nzId="categoryType" name="categoryType" [(ngModel)]="model.categoryType" formControlName="categoryType" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                        <nz-option
+                            *ngFor="let categType of categoryTypes | async"
+                            [nzLabel]="categType.name"
+                            [nzValue]="categType.id">
+                        </nz-option>
+                    </nz-select>
+                    <div nz-form-explain *ngIf="getFormControl('categoryType').dirty&&getFormControl('categoryType').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                </div>
+            </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col  [nzSpan]="8">
+                    <label for="limitDay">{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.limitDay'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="16">
+                    <nz-input [nzSize]="'large'" formControlName="limitDay" [nzId]="'limitDay'" [(ngModel)]="model.limitDay" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    <div nz-form-explain *ngIf="getFormControl('limitDay').dirty&&getFormControl('limitDay').value&&getFormControl('limitDay').hasError('numberError')">
+                        {{'default.validationMessages.numberErr'|translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col  [nzSpan]="8">
+                    <label>{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.limitCount'|translate}}</label>
+                </div>
+                <div nz-form-item nz-col [nzSpan]="16">
+                    <div nz-form-control nz-col [nzSpan]="11">
+                        <nz-input [nzSize]="'large'" formControlName="limitSingleMin" [nzId]="'limitSingleMin'" [(ngModel)]="model.limitSingleMin" nzPlaceHolder="{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.limitSingleMin'|translate}}"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('limitSingleMin').dirty&&getFormControl('limitSingleMin').value&&getFormControl('limitSingleMin').hasError('numberError')">
+                            {{'default.validationMessages.numberErr'|translate}}
+                        </div>
+                    </div>
+                    <div nz-form-item nz-col [nzSpan]="2">
+                        <p nz-form-split class="split-line-height"> - </p>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="11">
+                        <nz-input [nzSize]="'large'" formControlName="limitSingleMax" [nzId]="'limitSingleMax'" [(ngModel)]="model.limitSingleMax" nzPlaceHolder="{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.limitSingleMax'|translate}}"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('limitSingleMax').dirty&&getFormControl('limitSingleMax').value&&getFormControl('limitSingleMax').hasError('numberError')">
+                            {{'default.validationMessages.numberErr'|translate}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col  [nzSpan]="8">
+                    <label for="chanRate" nz-form-item-required>{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.chanRate'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="16">
+                    <nz-input [nzSize]="'large'" formControlName="chanRate" [nzId]="'chanRate'" [(ngModel)]="model.chanRate" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    <div nz-form-explain *ngIf="getFormControl('chanRate').dirty&&getFormControl('chanRate').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                    <div nz-form-explain *ngIf="getFormControl('chanRate').dirty&&getFormControl('chanRate').value&&getFormControl('chanRate').hasError('numberError')">
+                        {{'default.validationMessages.numberErr'|translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label  nz-col  [nzSpan]="8">
+                    <label for="fixFloatRate" nz-form-item-required>{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.fixFloatRate'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="16" nzHasFeedback>
+                    <nz-select nzId="fixFloatRate" name="fixFloatRate" [(ngModel)]="model.fixFloatRate" formControlName="fixFloatRate" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                        <nz-option
+                            *ngFor="let rateType of rateTypes | async"
+                            [nzLabel]="rateType.name"
+                            [nzValue]="rateType.id">
+                        </nz-option>
+                    </nz-select>
+                    <div nz-form-explain *ngIf="getFormControl('fixFloatRate').dirty&&getFormControl('fixFloatRate').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                </div>
+            </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label  nz-col  [nzSpan]="8">
+                    <label for="settleCycle" nz-form-item-required>{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.settleCycle'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="16" nzHasFeedback>
+                    <nz-select nzId="settleCycle" name="settleCycle" [(ngModel)]="model.settleCycle" formControlName="settleCycle" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                        <nz-option
+                            *ngFor="let settleCycle of settleCycles | async"
+                            [nzLabel]="settleCycle.name"
+                            [nzValue]="settleCycle.id">
+                        </nz-option>
+                    </nz-select>
+                    <div nz-form-explain *ngIf="getFormControl('settleCycle').dirty&&getFormControl('settleCycle').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                </div>
+            </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label  nz-col  [nzSpan]="8">
+                    <label for="chanShareRule" nz-form-item-required>{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.chanShareRule'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="16" nzHasFeedback>
+                    <nz-select nzId="chanShareRule" name="chanShareRule" [(ngModel)]="model.chanShareRule" formControlName="chanShareRule" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                        <nz-option
+                            *ngFor="let shareRule of shareRules | async"
+                            [nzLabel]="shareRule.name"
+                            [nzValue]="shareRule.id">
+                        </nz-option>
+                    </nz-select>
+                    <div nz-form-explain *ngIf="getFormControl('chanShareRule').dirty&&getFormControl('chanShareRule').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                </div>
+            </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+            <div nz-form-item nz-row>
+                <div nz-form-label  nz-col  [nzSpan]="8">
+                    <label for="state" nz-form-item-required>{{'Agency.detailPage.shareProfitCfg.shareProfitInfo.state'|translate}}</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="16" nzHasFeedback>
+                    <nz-select nzId="state" name="state" [(ngModel)]="model.state" formControlName="state" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                        <nz-option
+                            *ngFor="let useState of useStates | async"
+                            [nzLabel]="useState.name"
+                            [nzValue]="useState.id">
+                        </nz-option>
+                    </nz-select>
+                    <div nz-form-explain *ngIf="getFormControl('state').dirty&&getFormControl('state').hasError('required')">{{'default.validationMessages.emptyErr'|translate}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!(agencyChannelForm.valid)" [nzLoading]="isLoading">{{'default.btn.saveBtn'|translate}}</button>
+    </div>
+    <!--<div nz-form-item nz-row  class="text-center">-->
+        <!--<div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">-->
+            <!--<button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!(agencyChannelForm.valid)">{{'default.btn.saveBtn'|translate}}</button>-->
+        <!--</div>-->
+    <!--</div>-->
+</form>

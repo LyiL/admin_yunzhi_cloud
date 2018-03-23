@@ -1,0 +1,87 @@
+
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="18">
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label >{{'cashManage.cashAccoutDeteil.search.time'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="startDate"
+                                       [(ngModel)]="eleActDeailForm.startDate"
+                                       [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                       nzId="startDate"
+                                       nzPlaceHolder="{{'cashManage.cashAccoutDeteil.search.startDate'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split"> - </p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="endDate"
+                                       [(ngModel)]="eleActDeailForm.endDate"
+                                       nzId="endDate"
+                                       [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                       nzPlaceHolder="{{'cashManage.cashAccoutDeteil.search.endDate'|translate}}"
+                                       [nzDisabledDate]="onTradeTimeEndDateDisabled.bind(this)"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'eleAccount.eleAccDetail.search.mchNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="eleActDeailForm.mchNo"
+                                      [name]="'mchNo'"
+                                      nzId="mchNo"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'merchantNo'"
+                                      [tableCfg]="eleCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="incash">{{'eleAccount.eleAccDetail.search.incash'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="incash" name="incash" [(ngModel)]="eleActDeailForm.incash" nzPlaceHolder="{{'RM.listPage.html.pleaseselect'|translate}}">
+                            <nz-option [nzLabel]="'StaffM.listPage.html.all'|translate">></nz-option>
+                            <nz-option
+                                *ngFor="let accountType of accountTypes"
+                                [nzLabel]="accountType.name"
+                                [nzValue]="accountType.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #eleCacAccoutdetailTable
+                  [url]="eleCacAccoutdetailCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="eleCacAccoutdetailCfg.params"
+                  [columns]="eleCacAccoutdetailCfg.tableColumns"
+                  [resReName]="eleCacAccoutdetailCfg.resReName"
+                  [reqReName]="eleCacAccoutdetailCfg.reqReName"
+                  [isAjax]="eleCacAccoutdetailCfg.isAjax">
+       <!--记账类型-->
+        <ng-template st-row="incashRener" let-item>
+            <ng-container [ngSwitch]="item['incash']">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'">{{item['incash']| dictTrans:'RECORD_IN_CASH'}}</nz-tag>
+                <nz-tag *ngSwitchCase="2" [nzColor]="'orange'">{{item['incash']| dictTrans:'RECORD_IN_CASH'}}</nz-tag>
+            </ng-container>
+             <!--<ng-container >{{item['incash']| dictTrans:'RECORD_IN_CASH'}}</ng-container>-->
+        </ng-template>
+
+    </simple-table>
+</nz-card>

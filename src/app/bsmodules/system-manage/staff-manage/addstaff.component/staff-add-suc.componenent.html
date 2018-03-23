@@ -1,0 +1,12 @@
+<nz-card [nzBordered]="false" style="margin: 60px 0">
+    <result
+        type="success"
+        [title]="this.i18n.fanyi('StaffM.listPage.html.savesuc'|translate)"
+        description=""
+        [extra]="">
+        <!--<ng-template #resultExtra>-->
+
+        <!--</ng-template>-->
+        <button nz-button  [nzSize]="'large'" style="margin: 20px 0" (click)="onBank()">{{this.i18n.fanyi('StaffM.listPage.html.qus'|translate)}}</button>
+    </result>
+</nz-card>

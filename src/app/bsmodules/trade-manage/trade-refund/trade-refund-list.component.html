@@ -1,0 +1,289 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <!--申请时间-->
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.tradeTime'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="tradeTimeStart"
+                                       [(ngModel)]="refundListForm.tradeTimeStart"
+                                       [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                       nzId="tradeTimeStart"
+                                       nzPlaceHolder="{{'TradeRefund.listPage.search.tradeTimeStart'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split">-</p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="tradeTimeEnd"
+                                       [(ngModel)]="refundListForm.tradeTimeEnd"
+                                       nzId="tradeTimeEnd"
+                                       [nzDisabledDate]="refundTradeEndDateDisabled.bind(this)"
+                                       [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                       nzPlaceHolder="{{'TradeRefund.listPage.search.tradeTimeEnd'|translate}}"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <!--退款时间-->
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.returnTime'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="returnTimeStart"
+                                       [ngModel]="refundListForm.refundTimeStart"
+                                       (ngModelChange)="returnTimeStartChange($event)"
+                                       [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                       nzId="tradeTimeStart"
+                                       nzPlaceHolder="{{'TradeRefund.listPage.search.returnTimeStart'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split">-</p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="returnTimeEnd"
+                                       [ngModel]="refundListForm.refundTimeEnd"
+                                       (ngModelChange)="returnTimeEndChange($event)"
+                                       nzId="returnTimeEnd"
+                                       [nzDisabledDate]="returnTimeEndDateDisabled.bind(this)"
+                                       [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                       nzPlaceHolder="{{'TradeRefund.listPage.search.returnTimeEnd'|translate}}"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <!--商户审核状态-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.merchantExam'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="merchantExam"
+                                   name="merchantExam"
+                                   [nzSize]="'large'"
+                                   [(ngModel)]="refundListForm.merchantExam"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                   nzAllowClear>
+                            <nz-option nzLabel="{{'Agency.listPage.search.all'|translate}}"></nz-option>
+                            <nz-option *ngFor="let mchExam of mchExams" [nzLabel]="mchExam.name" [nzValue]="mchExam.id"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <!--平台审核状态-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.daemonAudit'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="daemonAudit"
+                                   name="daemonAudit"
+                                   [nzSize]="'large'"
+                                   [(ngModel)]="refundListForm.daemonAudit"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                   nzAllowClear>
+                            <nz-option nzLabel="{{'Agency.listPage.search.all'|translate}}"></nz-option>
+                            <nz-option *ngFor="let dmAudit of dmAudits" [nzLabel]="dmAudit.name" [nzValue]="dmAudit.id"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <!--退款状态-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.refundState'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="refundState"
+                                   name="refundState"
+                                   [nzSize]="'large'"
+                                   [(ngModel)]="refundListForm.refundState"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                   nzAllowClear>
+                            <nz-option nzLabel="{{'Agency.listPage.search.all'|translate}}"></nz-option>
+                            <nz-option *ngFor="let rfState of rfStates" [nzLabel]="rfState.name" [nzValue]="rfState.id"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <!--退款来源-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.refundSource'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="refundSource"
+                                   name="refundSource"
+                                   [nzSize]="'large'"
+                                   [(ngModel)]="refundListForm.refundSource"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                   nzAllowClear>
+                            <nz-option nzLabel="{{'Agency.listPage.search.all'|translate}}"></nz-option>
+                            <nz-option *ngFor="let rfSource of rfSources" [nzLabel]="rfSource.name" [nzValue]="rfSource.id"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <!--第三方单号-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.transactionId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="refundListForm.transactionId"
+                                  name="transactionId"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                  nzId="transactionId"></nz-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <!--退款单号-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.refundNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="refundListForm.refundNo" name="refundNo" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="refundNo"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <!--平台单号-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.orderNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="refundListForm.orderNo" name="orderNo" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="orderNo"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <!--支付类型-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.transId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="transId"
+                                   name="transId"
+                                   [nzSize]="'large'"
+                                   [(ngModel)]="refundListForm.transId"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                   nzAllowClear>
+                            <nz-option nzLabel="{{'Agency.listPage.search.all'|translate}}"></nz-option>
+                            <nz-option *ngFor="let ctransType of transTypes|async"
+                                       [nzLabel]="ctransType.transType"
+                                       [nzValue]="ctransType.transId"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <!--商户名称-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRefund.listPage.search.merchantNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="refundListForm.merchantNo"
+                                      [name]="'merchantNo'"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      nzId="merchantNo"
+                                      [tableCfg]="merchantNoCfg"
+                                      [displayField]="'name'"
+                                      [valueField]="'merchantNo'"></search-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="24" style="text-align:left;" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+                <button nz-button *ngIf="helper.btnRole('REFUNDAPPLY')" (click)="onApplyRefund()" [nzType]="'default'" [nzSize]="'large'">
+                    <span>{{'TradeRefund.listPage.btn.applyRefundBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="12" class="header-info">
+            <p class="text-grey-dark">{{'TradeRefund.listPage.counts.refundCount'|translate}}</p>
+            <p class="display-2">{{counts['refundCount'] || 0}}</p>
+            <em></em>
+        </div>
+        <div nz-col [nzXs]="24" [nzSm]="12" class="header-info">
+            <p class="text-grey-dark">{{'TradeRefund.listPage.counts.refundFee'|translate}}</p>
+            <p class="display-2">{{counts['refundFee']|moneySpunYuanTrans:'1.0-2'}}</p>
+            <!--<p class="display-2">{{helper.numberTrans(counts['refundFee'],'division',100) |number:'1.0-2'}}</p>-->
+        </div>
+    </div>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #refundListTable
+                  [url]="tableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="tableCfg.params"
+                  [total]="tableCfg.total"
+                  [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName"
+                  [reqReName]="tableCfg.reqReName"
+                  [isAjax]="tableCfg.isAjax">
+        <!--退款单号与平台单号渲染-->
+        <ng-template st-row="refundNoRender" let-item let-index="index">
+            <span>{{item['refundNo']}}</span> <br/> <span>{{item['orderNo']}}</span>
+        </ng-template>
+
+        <!--商户审核状态渲染-->
+        <ng-template st-row="merchantExamRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['merchantExam']">
+                <nz-tag *ngSwitchCase="0" [nzColor]="'blue'">{{helper.dictTrans('REFUND_MCH_AUDIT_STATUS', item['merchantExam'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="1" [nzColor]="'orange'">{{helper.dictTrans('REFUND_MCH_AUDIT_STATUS', item['merchantExam'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="2" [nzColor]="'green'">{{helper.dictTrans('REFUND_MCH_AUDIT_STATUS', item['merchantExam'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="3" [nzColor]="'red'">{{helper.dictTrans('REFUND_MCH_AUDIT_STATUS', item['merchantExam'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+
+        <!--平台审核状态渲染-->
+        <ng-template st-row="dmAuditRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['daemonAudit']">
+                <nz-tag *ngSwitchCase="0" [nzColor]="'blue'">{{helper.dictTrans('REFUND_DAEMON_AUDIT', item['daemonAudit'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="1" [nzColor]="'grey'">{{helper.dictTrans('REFUND_DAEMON_AUDIT', item['daemonAudit'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="2" [nzColor]="'orange'">{{helper.dictTrans('REFUND_DAEMON_AUDIT', item['daemonAudit'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="3" [nzColor]="'green'">{{helper.dictTrans('REFUND_DAEMON_AUDIT', item['daemonAudit'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="4" [nzColor]="'red'">{{helper.dictTrans('REFUND_DAEMON_AUDIT', item['daemonAudit'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+
+        <!--退款金额渲染-->
+        <ng-template st-row="refundFeeRender" let-item>
+            {{item['refundFee']|moneySpunYuanTrans:'1.0-2'}}
+            <!--{{helper.numberTrans(item['refundFee'],'division',100) | number:'1.0-2'}}-->
+        </ng-template>
+
+        <!--退款状态渲染-->
+        <ng-template st-row="rfStateRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['refundState']">
+                <nz-tag *ngSwitchCase="0" [nzColor]="'blue'">{{helper.dictTrans('REFUND_STATUS', item['refundState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'">{{helper.dictTrans('REFUND_STATUS', item['refundState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="2" [nzColor]="'red'">{{helper.dictTrans('REFUND_STATUS', item['refundState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="3" [nzColor]="'orange'">{{helper.dictTrans('REFUND_STATUS', item['refundState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="4" [nzColor]="'purple'">{{helper.dictTrans('REFUND_STATUS', item['refundState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="5" [nzColor]="'pink'">{{helper.dictTrans('REFUND_STATUS', item['refundState'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+
+        <!--风控状态渲染-->
+        <ng-template st-row="rCRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['riskCtr']">
+                <nz-tag *ngSwitchCase="0" [nzColor]="'blue'">{{helper.dictTrans('RISK_CTR_STATU', item['riskCtr'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'">{{helper.dictTrans('RISK_CTR_STATU', item['riskCtr'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="2" [nzColor]="'orange'">{{helper.dictTrans('RISK_CTR_STATU', item['riskCtr'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="3" [nzColor]="'red'">{{helper.dictTrans('RISK_CTR_STATU', item['riskCtr'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="4" [nzColor]="'purple'">{{helper.dictTrans('RISK_CTR_STATU', item['riskCtr'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>

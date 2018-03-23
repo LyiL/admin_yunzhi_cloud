@@ -1,0 +1,390 @@
+<!--<pro-header></pro-header>-->
+
+<nz-tabset (nzSelectedIndexChange) = "onChangeTab($event)">
+
+    <nz-tab>
+        <ng-template #nzTabHeading>{{'channelDay.listPage.channelTab.settleDay'|translate}}</ng-template>
+
+        <nz-card [nzBordered]="true">
+            <form nz-form [nzLayout]="'inline'">
+                <div nz-row [nzGutter]="25">
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label>{{'channelDay.listPage.search.dateTitle'|translate}}</label></div>
+                            <div nz-form-control>
+                                <nz-datepicker [nzSize]="'large'"
+                                               name="billTimeStart"
+                                               [(ngModel)]="channelDayForm.billTimeStart"
+                                               [nzFormat]="'YYYY-MM-DD'"
+                                               nzId="billTimeStart"
+                                               nzPlaceHolder="{{'channelDay.listPage.search.billTimeStart'|translate}}"></nz-datepicker>
+                            </div>
+                            <div>
+                                <p nz-form-split style="line-height: 28px; padding:0 10px;"> - </p>
+                            </div>
+                            <div nz-form-control>
+                                <nz-datepicker [nzSize]="'large'"
+                                               name="billTimeEnd"
+                                               [(ngModel)]="channelDayForm.billTimeEnd"
+                                               nzId="billTimeEnd"
+                                               [nzFormat]="'YYYY-MM-DD'"
+                                               [nzDisabledDate]="EndDateDisabled.bind(this)"
+                                               nzPlaceHolder="{{'channelDay.listPage.search.billTimeEnd'|translate}}"></nz-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="agencyCode">{{'Settle.listPage.search.agencyCode'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayForm.agencyCode" [name]="'agencyCode'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="agencyCode"
+                                              [tableCfg]="agencyCodeCfg"
+                                              (nzSelect)="agencyCodesearchSelected($event)"
+                                              [displayField]="'name'"
+                                              [valueField]="'orgNo'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="canalNo">{{'Settle.listPage.search.agentno'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayForm.canalNo" [name]="'canalNo'"
+                                              [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                              nzId="canalNo"
+                                              [tableCfg]="CanalNoTableCfg"
+                                              [searchBefore]="CanalNoSearchBefore.bind(this)"
+                                              (nzSelect)="CanalNoSelected($event)"
+                                              [(displayValue)]="channelDayForm.canalName"
+                                              [displayField]="'name'"
+                                              [valueField]="'chanCode'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-row [nzGutter]="25">
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="ChanProNo">{{'channelDay.listPage.search.chanProNo'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayForm.chanProNo"
+                                              [name]="'chanProNo'" [nzSize]="'large'"
+                                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="chanProNo"
+                                              [tableCfg]="ChanProNoTableCfg"
+                                              [displayField]="'name'"
+                                              [searchBefore]="chanProNoSearchBefore.bind(this)"
+                                              (nzSelect)="ChanProNoSelected($event)"
+                                              [(displayValue)]="channelDayForm.chanProName"
+                                              [valueField]="'chanCode'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="transId">{{'channelDay.listPage.search.transId'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <nz-select nzId="transId" name="transId" [(ngModel)]="channelDayForm.transId" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                    <nz-option  nzLabel="{{'channelDay.All'|translate}}"></nz-option>
+                                    <nz-option
+                                        *ngFor="let Type of tradeTypes"
+                                        [nzLabel]="Type.transType"
+                                        [nzValue]="Type.transId">
+                                    </nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="ally">{{'channelDay.listPage.search.ally'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayForm.ally"
+                                              [name]="'ally'" [nzSize]="'large'"
+                                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="ally"
+                                              [tableCfg]="allyTableCfg"
+                                              [displayField]="'companionName'"
+                                              [valueField]="'companion'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="3" class="mb-md">
+                        <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                            <span>{{'channelDay.btn.searchBtn'|translate}}</span>
+                        </button>
+                        <button nz-button *ngIf="helper.btnRole('BILLCHANREMIT')" (click)="onSettlePayBtn()" [nzType]="'default'" [nzSize]="'large'">
+                            <span>{{'channelDay.btn.settlePayBtn'|translate}}</span>
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </nz-card>
+        <nz-card [nzBordered]="true">
+            <div nz-row>
+                <div nz-col [nzXs]="24" [nzSm]="6" class="header-info">
+                    <p class="text-grey-dark">{{'channelDay.listPage.Band.title1'|translate}}</p>
+                    <p class="display-2">{{ count?.totalFeeSum | number:'0.0-6' }}</p>
+                    <em></em>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="6" class="header-info">
+                    <p class="text-grey-dark">{{'channelDay.listPage.Band.title2'|translate}}</p>
+                    <p class="display-2">{{ count?.bankTotalFeeSum | number:'0.0-6' }}</p>
+                    <em></em>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="6" class="header-info">
+                    <p class="text-grey-dark">{{'channelDay.listPage.Band.title3'|translate}}</p>
+                    <p class="display-2">{{ count?.chanTotalFeeSum | number:'0.0-6' }}</p>
+                    <em></em>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="6" class="text-center">
+                    <p class="text-grey-dark">{{'channelDay.listPage.Band.title4'|translate}}</p>
+                    <p class="display-2">{{ count?.techTotalFeeSum | number:'0.0-6' }}</p>
+                    <em></em>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card [nzBordered]="true">
+            <simple-table #channelDayListTable [url]="tableCfg.url" [reqMehtod]="'POST'"  [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                          [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName" [isAjax]="tableCfg.isAjax">
+                <ng-template st-row="cashTypeRender" let-item let-index="index">
+                    <ng-container [ngSwitch]="item['cashType']">
+                        <span *ngSwitchCase='0' >{{helper.dictTrans('CASH_TYPE', item['cashType'])}}</span>
+                        <span *ngSwitchCase='1' >{{helper.dictTrans('CASH_TYPE', item['cashType'])}}</span>
+                        <span *ngSwitchCase='2' >{{helper.dictTrans('CASH_TYPE', item['cashType'])}}</span>
+                    </ng-container>
+                </ng-template>
+                <ng-template st-row="cashTotalFeeRender" let-item let-index="index">
+                    <ng-container>
+                        <span>{{item['cashTotalFee'] | number:'0.0-6'}}</span>
+                    </ng-container>
+                </ng-template>
+                <ng-template st-row="transTypeRender" let-item>
+                    {{!helper.isEmpty(item['transType'])?item['transType'] : '/'}}
+                </ng-template>
+                <ng-template st-row="totalQuaRender" let-item>
+                    {{!helper.isEmpty(item['totalQua'])?item['totalQua'] : '/'}}
+                </ng-template>
+                <ng-template st-row="totalFeeRender" let-item>
+                    {{!helper.isEmpty(item['totalFee'])?item['totalFee'] : '/'}}
+                </ng-template>
+                <ng-template st-row="cashStateRender" let-item let-index="index">
+                    <ng-container [ngSwitch]="item['cashState']">
+                        <nz-tag *ngSwitchCase='0' [nzColor]="'orange'">{{helper.dictTrans('CASH_STATUS', item['cashState'])}}</nz-tag>
+                        <nz-tag *ngSwitchCase='1' [nzColor]="'green'" >{{helper.dictTrans('CASH_STATUS', item['cashState'])}}</nz-tag>
+                        <nz-tag *ngSwitchCase='2' [nzColor]="'red'">{{helper.dictTrans('CASH_STATUS', item['cashState'])}}</nz-tag>
+                    </ng-container>
+                </ng-template>
+            </simple-table>
+        </nz-card>
+    </nz-tab>
+    <nz-tab>
+        <ng-template #nzTabHeading>
+            {{'channelDay.listPage.channelTab.settleDetail'|translate}}
+        </ng-template>
+        <nz-card [nzBordered]="true">
+            <form nz-form [nzLayout]="'inline'">
+                <div nz-row [nzGutter]="25">
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label>{{'channelDay.listPage.search.dateTradeTitle'|translate}}</label></div>
+                            <div nz-form-control>
+                                <nz-datepicker [nzSize]="'large'"
+                                               name="billTimeStart"
+                                               [(ngModel)]="channelDayDetailForm.billTimeStart"
+                                               [nzFormat]="'YYYY-MM-DD'"
+                                               nzId="billTimeStart"
+                                               nzPlaceHolder="{{'channelDay.listPage.search.billTimeStart'|translate}}"></nz-datepicker>
+                            </div>
+                            <div>
+                                <p nz-form-split style="line-height: 28px; padding:0 10px;"> - </p>
+                            </div>
+                            <div nz-form-control>
+                                <nz-datepicker [nzSize]="'large'"
+                                               name="billTimeEnd"
+                                               [(ngModel)]="channelDayDetailForm.billTimeEnd"
+                                               nzId="billTimeEnd"
+                                               [nzFormat]="'YYYY-MM-DD'"
+                                               [nzDisabledDate]="detailEndDateDisabled.bind(this)"
+                                               nzPlaceHolder="{{'channelDay.listPage.search.billTimeEnd'|translate}}"></nz-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="agencyCode">{{'Settle.listPage.search.agencyCode'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayDetailForm.agencyCode" [name]="'agencyCode'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="agencyCode"
+                                              [tableCfg]="agencyCodeCfg"
+                                              (nzSelect)="agencyCodesearchDetailSelected($event)"
+                                              [displayField]="'name'"
+                                              [valueField]="'orgNo'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="canalNo">{{'Settle.listPage.search.agentno'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayDetailForm.canalNo"
+                                              [name]="'canalNo'" [nzSize]="'large'"
+                                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="canalNo"
+                                              [tableCfg]="CanalNoTableCfg"
+                                              [searchBefore]="CanalNoSearchDetailBefore.bind(this)"
+                                              (nzSelect)="CanalNoDetailSelected($event)"
+                                              [(displayValue)]="channelDayDetailForm.canalName"
+                                              [displayField]="'name'"
+                                              [valueField]="'chanCode'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div nz-row [nzGutter]="25">
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="ChanProNo">{{'channelDay.listPage.search.chanProNo'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayDetailForm.chanProNo"
+                                              [name]="'chanProNo'" [nzSize]="'large'"
+                                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="chanProNo"
+                                              [tableCfg]="ChanProNoTableCfg"
+                                              [searchBefore]="chanProNoDetailSearchBefore.bind(this)"
+                                              (nzSelect)="ChanProNoDetailSelected($event)"
+                                              [(displayValue)]="channelDayDetailForm.chanProName"
+                                              [displayField]="'name'"
+                                              [valueField]="'chanCode'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="merchantNo">{{'channelDay.listPage.search.merchantNo'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayDetailForm.merchantNo"
+                                              [name]="'merchantNo'"
+                                              [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="merchantNo"
+                                              [tableCfg]="mchTableCfg"
+                                              [searchBefore]="merchantNoSearchBefore.bind(this)"
+                                              (nzSelect)="merchantNoSelected($event)"
+                                              [(displayValue)]="channelDayDetailForm.merchantName"
+                                              [displayField]="'name'"
+                                              [valueField]="'merchantNo'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="transId">{{'channelDay.listPage.search.transId'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <nz-select nzId="transId" name="transId" [(ngModel)]="channelDayDetailForm.transId" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                                    <nz-option  nzLabel="{{'channelDay.All'|translate}}"></nz-option>
+                                    <nz-option
+                                        *ngFor="let Type of tradeTypes"
+                                        [nzLabel]="Type.transType"
+                                        [nzValue]="Type.transId">
+                                    </nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="7" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-label><label for="ally">{{'channelDay.listPage.search.ally'|translate}}</label></div>
+                            <div nz-form-control class="flex-1">
+                                <search-input [(ngModel)]="channelDayDetailForm.ally"
+                                              [name]="'ally'" [nzSize]="'large'"
+                                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="ally"
+                                              [tableCfg]="allyTableCfg"
+                                              [displayField]="'companionName'"
+                                              [valueField]="'companion'"
+                                ></search-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="6" class="mb-md">
+                        <button nz-button (click)="onDetailSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                            <span>{{'channelDay.DetailBtn.searchBtn'|translate}}</span>
+                        </button>
+                        <button nz-button (click)="onSettleDetailPayBtn()" *ngIf="helper.btnRole('BILLCHANREMIT')"  [nzType]="'default'" [nzSize]="'large'">
+                            <span>{{'channelDay.btn.settlePayBtn'|translate}}</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </nz-card>
+        <nz-card [nzBordered]="true">
+            <div nz-row>
+                <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+                    <p class="text-grey-dark">{{'channelDay.listPage.Band.title5'|translate}}</p>
+                    <p class="display-2">{{ countDetail?.totalCountSum | number:'0.0-6' }}</p>
+                    <em></em>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="8" class="header-info">
+                    <p class="text-grey-dark">{{'channelDay.listPage.Band.title6'|translate}}</p>
+                    <p class="display-2">{{ countDetail?.totalFeeSum| number:'0.0-6' }}</p>
+                    <em></em>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="8" class="text-center">
+                    <p class="text-grey-dark">{{'channelDay.listPage.Band.title7'|translate}}</p>
+                    <p class="display-2">{{countDetail?.ntTotalFeeSum| number:'0.0-6' }}</p>
+                    <em></em>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card [nzBordered]="true">
+            <simple-table #channelDayDetailListTable [url]="tableDetailCfg.url" [reqMehtod]="'POST'"  [extraParams]="tableDetailCfg.params" [total]="tableDetailCfg.total" [columns]="tableDetailCfg.tableColumns"
+                          [resReName]="tableDetailCfg.resReName" [reqReName]="tableDetailCfg.reqReName" [isAjax]="tableDetailCfg.isAjax">
+                <ng-template st-row="canalNameRender" let-item let-index="index">
+                    <ng-container>
+                        <span>{{item['canalName']}}</span><br><span>{{item['merchantName']}}</span>
+                    </ng-container>
+                </ng-template>
+                <ng-template st-row="cashTotalFeeRender" let-item let-index="index">
+                    <ng-container>
+                        <span>{{item['cashTotalFee']| number:'0.0-6'}}</span>
+                    </ng-container>
+                </ng-template>
+                <ng-template st-row="atRateRender" let-item let-index="index">
+                    <ng-container>
+                        <span>{{helper.numberTrans(item['atRate'])| number:'0.0-6'}}</span><br><span>{{helper.numberTrans(item['parentRate'])| number:'0.0-6'}}</span>
+                    </ng-container>
+                </ng-template>
+                <ng-template st-row="difRateRender" let-item let-index="index">
+                    <ng-container>
+                        <span>{{helper.numberTrans(item['difRate'])| number:'0.0-6'}}</span>
+                    </ng-container>
+                </ng-template>
+                <ng-template st-row="transTypeRender" let-item>
+                    {{!helper.isEmpty(item['transType'])?item['transType'] : '/'}}
+                </ng-template>
+                <ng-template st-row="totalQuaRender" let-item>
+                    {{!helper.isEmpty(item['totalQua'])?item['totalQua'] : '/'}}
+                </ng-template>
+                <ng-template st-row="totalFeeRender" let-item>
+                    {{!helper.isEmpty(item['totalFee'])?item['totalFee'] : '/'}}
+                </ng-template>
+
+                <ng-template st-row="cashTypeRender" let-item let-index="index">
+                    <ng-container [ngSwitch]="item['cashType']">
+                        <span *ngSwitchCase='0' >{{helper.dictTrans('CASH_TYPE', item['cashType'])}}</span>
+                        <span *ngSwitchCase='1' >{{helper.dictTrans('CASH_TYPE', item['cashType'])}}</span>
+                        <span *ngSwitchCase='2' >{{helper.dictTrans('CASH_TYPE', item['cashType'])}}</span>
+                    </ng-container>
+                </ng-template>
+            </simple-table>
+        </nz-card>
+    </nz-tab>
+</nz-tabset>

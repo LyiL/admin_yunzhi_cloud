@@ -1,0 +1,66 @@
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="payCardNo">{{'topayTrade.search.outTradeNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="orderForm.outTradeNo" name="outTradeNo" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="accountName"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="transNo">{{'topayTrade.search.transNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="orderForm.transNo" name="transNo" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="accountName"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #orderListTable
+                  [url]="orderTableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="orderTableCfg.params"
+                  [columns]="orderTableCfg.tableColumns"
+                  [resReName]="orderTableCfg.resReName"
+                  [reqReName]="orderTableCfg.reqReName"
+                  [isAjax]="orderTableCfg.isAjax">
+
+        <ng-template st-row="outTradeNoRender" let-item let-index="index">
+            <span>{{item['outTradeNo']}}</span><br>
+            <span>{{item['transNo']}}</span>
+
+        </ng-template>
+
+        <ng-template st-row="totalFeeRender" let-item let-index="index">
+            <span>{{item['totalFee']| moneySpunYuanTrans}}</span><br>
+        </ng-template>
+        <ng-template st-row="totalAmountRender" let-item let-index="index">
+            <span>{{item['totalAmount']| moneySpunYuanTrans}}</span><br>
+        </ng-template>
+
+        <!--交易状态渲染-->
+        <ng-template st-row="tradeStateRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['tradeState']">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'orange'">{{helper.dictTrans('CASH_ORDER_STATUS',item['tradeState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="2" [nzColor]="'green'">{{helper.dictTrans('CASH_ORDER_STATUS',item['tradeState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="3" [nzColor]="'orange'">{{helper.dictTrans('CASH_ORDER_STATUS',item['tradeState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="9" [nzColor]="'red'">{{helper.dictTrans('CASH_ORDER_STATUS',item['tradeState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="11" [nzColor]="'red'">{{helper.dictTrans('CASH_ORDER_STATUS',item['tradeState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="99" [nzColor]="'red'">{{helper.dictTrans('CASH_ORDER_STATUS',item['tradeState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="12" [nzColor]="'red'">{{helper.dictTrans('CASH_ORDER_STATUS',item['tradeState'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+
+    </simple-table>
+</nz-card>

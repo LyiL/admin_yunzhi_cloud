@@ -1,0 +1,57 @@
+<form nz-form [formGroup]="refundAuthForm" (ngSubmit)="onSave()">
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col  [nzSm]="5">
+            <label for="name" nz-form-item-required>{{'RefundSets.refAuthPage.win.name'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-input [nzSize]="'large'" formControlName="name" [nzId]="'name'" [(ngModel)]="model.name" nzDisabled="true"></nz-input>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label  nz-col  [nzSm]="5">
+            <label for="transId" nz-form-item-required>{{'RefundSets.refAuthPage.win.transId'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-select nzId="transId" name="transId" [(ngModel)]="model.transId" formControlName="transId" (nzSelectChange)="getTransType($event)" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                <nz-option nzValue="*" nzLabel="{{'RefundSets.refAuthPage.message.allType'|translate}}"></nz-option>
+                <nz-option
+                    *ngFor="let payType of payTypes | async"
+                    [nzLabel]="payType.transType"
+                    [nzValue]="payType.transId">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label  nz-col  [nzSm]="5">
+            <label for="refundAuth" nz-form-item-required>{{'RefundSets.refAuthPage.win.refundAuth'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18">
+            <nz-checkbox-group [(ngModel)]="refundAuthAny" (ngModelChange)="onChecked(refundAuthAny)" formControlName="refundAuth">
+            </nz-checkbox-group>
+            <br>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label  nz-col  [nzSm]="5">
+            <label for="examType" nz-form-item-required>{{'RefundSets.refAuthPage.win.examType'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="18" nzHasFeedback>
+            <nz-select nzId="examType" name="examType" [(ngModel)]="model.examType" formControlName="examType" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                <nz-option
+                    *ngFor="let approvalType of approvalTypes"
+                    [nzLabel]="approvalType.name"
+                    [nzValue]="approvalType.id">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!(refundAuthForm.valid)">{{'default.btn.saveBtn'|translate}}</button>
+    </div>
+    <!--<div nz-form-item nz-row  class="text-center">-->
+        <!--<div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">-->
+            <!--<button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!(refundAuthForm.valid)">{{'default.btn.saveBtn'|translate}}</button>-->
+        <!--</div>-->
+    <!--</div>-->
+</form>

@@ -1,0 +1,177 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="true">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="25">
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="name">{{'Mch.listPage.search.name'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="mchListForm.name" name="name" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="name"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="merchantNo">{{'Mch.listPage.search.merchantNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="mchListForm.merchantNo" name="merchantNo" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="merchantNo"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="outerBatchId">{{'Mch.listPage.search.outerBatchId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="mchListForm.outerBatchId" name="outerBatchId" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="outerBatchId"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="bankNo">{{'Mch.listPage.search.bankNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="mchListForm.bankNo" [name]="'bankNo'" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="bankNo"
+                                      [tableCfg]="agencyCodeCfg"
+                                      (nzSelect)="agencyCodesearchSelected($event)"
+                                      [displayField]="'name'"
+                                      [valueField]="'orgNo'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div nz-row [nzGutter]="25">
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="chanNo">{{'Mch.listPage.search.chanNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="mchListForm.chanNo"
+                                      [name]="'chanNo'" [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="chanNo"
+                                      [tableCfg]="chanNoTableCfg"
+                                      [displayField]="'name'"
+                                      [(displayValue)]="mchListForm.chanName"
+                                      [searchBefore]="chanNoSearchBefore.bind(this)"
+                                      [valueField]="'chanCode'"
+                                      (nzSelect)="onSelectValue($event)"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="examState">{{'Mch.listPage.search.examState'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <!--<nz-input [(ngModel)]="mchListForm.examState" name="examState" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="examState"></nz-input>-->
+                        <nz-select nzId="examState" name="examState" [(ngModel)]="mchListForm.examState" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option  nzLabel="{{'Mch.All'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of examineStatus"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="ally">{{'Mch.listPage.search.ally'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="mchListForm.ally" name="ally" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="ally"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="centerId">{{'Mch.listPage.search.centerId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="mchListForm.centerId"
+                                      [name]="'centerId'" [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}" nzId="centerId"
+                                      [tableCfg]="centerIdTableCfg"
+                                      [displayField]="'name'"
+                                      [valueField]="'id'"
+                        ></search-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="25">
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="tradeAuth">{{'Mch.listPage.search.tradeAuth'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="tradeAuth" name="tradeAuth" [(ngModel)]="mchListForm.tradeAuth" nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option  nzLabel="{{'Mch.All'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let Auth of tradeAuth"
+                                [nzLabel]="Auth.name"
+                                [nzValue]="Auth.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'Mch.btn.searchBtn'|translate}}</span>
+                </button>
+                <button nz-button *ngIf="helper.btnRole('MCHNEW')"  (click)="onAdd()" [nzType]="'default'" [nzSize]="'large'">
+                    <span>{{'Mch.btn.addBtn'|translate}}</span>
+                </button>
+                <button nz-button  *ngIf="helper.btnRole('BATCHAPPROVEMCHCLOUD')" (click)="onAuthentication($event)" [nzType]="'default'" [nzSize]="'large'">
+                <span>{{'Mch.btn.onAuthenticationBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+
+    </form>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <simple-table #mchListTable [url]="tableCfg.url" [reqMehtod]="'POST'"  [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName" [isAjax]="tableCfg.isAjax">
+        <ng-template st-row="outerBatchIdRender" let-item let-index="index" >
+            {{!helper.isEmpty(item['outerBatchId'])?item['outerBatchId'] : '/'}}
+        </ng-template>
+        <ng-template st-row="chanNameRender" let-item let-index="index" >
+            {{!helper.isEmpty(item['chanName'])?item['chanName'] : '/'}}
+        </ng-template>
+        <ng-template st-row="alipayMchLiverender" let-item>
+            {{!helper.isEmpty(item['alipayMchLive'])?item['alipayMchLive'].split("_")[2] : '/'}}
+        </ng-template>
+        <ng-template st-row="aliPayMchLiveSearchRender" let-item>
+            <ng-container *ngIf="hasConfigValueMatch('CLOUD_ULO_BANK_NO',item['bankNo']) ||(!helper.btnRole('ALIPAYRANK'))">/</ng-container>
+            <ng-container *ngIf="!hasConfigValueMatch('CLOUD_ULO_BANK_NO',item['bankNo'])&&(helper.btnRole('ALIPAYRANK'))">
+                <a (click)="aliPayMchLiveSearch(item)">{{'Mch.btn.searchBtn'|translate}}</a>
+            </ng-container>
+        </ng-template>
+        <ng-template st-row="weixinAccountSetRender" let-item>
+            <ng-container >
+                <ng-template #spanEmpty> / </ng-template>
+                <span  *ngIf="!hasConfigValueMatch('CLOUD_ULO_BANK_NO',item['bankNo'])&& helper.btnRole('EDITWECHATACT'); else spanEmpty" > <a (click)="onConfig(item)">{{'Mch.btn.onConfig'|translate}}</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span *ngIf="!hasConfigValueMatch('CLOUD_ULO_BANK_NO',item['bankNo']) && helper.btnRole('QUERYWECHATACT'); else spanEmpty"><a (click)="onSearchW(item)">{{'Mch.btn.searchBtn'|translate}}</a></span>
+            </ng-container>
+        </ng-template>
+        <ng-template st-row="tradeAuthRender" let-item>
+            <ng-container *ngIf="item['tradeAuth'] == 0" >
+                <nz-tag [nzColor]="'red'"><span>{{'Mch.btn.NotradeAuth'|translate}}</span><i *ngIf="!hasConfigValueMatch('CLOUD_ULO_BANK_NO',item['bankNo'])&&helper.btnRole('WECHATPAYAUTH')" (click)="onChangeStatus(item)" class="anticon anticon-caret-right"> </i>  </nz-tag>
+            </ng-container>
+            <ng-container *ngIf="item['tradeAuth'] == 1" >
+                <nz-tag [nzColor]="'green'"><span>{{'Mch.btn.tradeAuth'|translate}}</span><i *ngIf="!hasConfigValueMatch('CLOUD_ULO_BANK_NO',item['bankNo'])&&helper.btnRole('WECHATPAYAUTH')" (click)="onChangeStatus(item)" class="anticon anticon-pause"> </i>   </nz-tag>
+            </ng-container>
+            <ng-container *ngIf="item['tradeAuth'] == null">/</ng-container>
+        </ng-template>
+        <ng-template st-row="examStateRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['examState']">
+                <nz-tag *ngSwitchCase='0' [nzColor]="'orange'">{{helper.dictTrans('EXAMINE_STATUS', item['examState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='1' [nzColor]="'green'">{{helper.dictTrans('EXAMINE_STATUS', item['examState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='2' [nzColor]="'red'">{{helper.dictTrans('EXAMINE_STATUS', item['examState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='3' [nzColor]="'gray'">{{helper.dictTrans('EXAMINE_STATUS', item['examState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='4' [nzColor]="'red'">{{helper.dictTrans('EXAMINE_STATUS', item['examState'])}}</nz-tag>
+                </ng-container>
+                </ng-template>
+    </simple-table>
+</nz-card>

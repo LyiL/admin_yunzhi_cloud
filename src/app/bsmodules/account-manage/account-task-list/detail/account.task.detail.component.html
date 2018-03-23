@@ -1,0 +1,36 @@
+<!--&lt;!&ndash;<pro-header></pro-header>&ndash;&gt;-->
+
+<nz-card [nzBordered]="false" class="ng-card-m">
+    <desc-list size="large" class="mb-lg" [col]="'2'">
+        <ng-container *ngFor="let detail of detailFields">
+            <desc-list-item term="{{detail.title}}">
+                <ng-container [ngSwitch]="detail.type">
+
+                    <ng-container *ngSwitchCase="'datetime'">
+                        {{!helper.isEmpty(detailData[detail.field]) ? (detailData[detail.field] | _date:detail['format']) : '/'}}
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'dict'">
+                        {{!helper.isEmpty(detailData[detail.field]) ? (detailData[detail.field] | dictTrans:detail['transKey']) : '/'}}
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'number'">
+                        {{detailData[detail.field] ? detailData[detail.field] : '0'}}
+                    </ng-container>
+
+                    <ng-container *ngSwitchDefault>
+                        {{detailData[detail.field] ? detailData[detail.field] : '/'}}
+                    </ng-container>
+
+                </ng-container>
+            </desc-list-item>
+        </ng-container>
+    </desc-list>
+
+    <div class="mb-md text-center">
+        <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)='onBack()'>{{'default.btn.backBtn' | translate}}</button>
+    </div>
+</nz-card>
+
+
+

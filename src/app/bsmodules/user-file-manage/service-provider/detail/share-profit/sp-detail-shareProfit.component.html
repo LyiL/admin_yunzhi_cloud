@@ -1,0 +1,61 @@
+<nz-card [nzBordered]="false" nzTitle="{{'SP.detailPage.shareCfg.sTitle'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="onAddShare()" *ngIf="helper.btnRole('ADDDIVIDECONF')">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #spShareTable
+                  [url]="shareCfgTableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [isAjax]="shareCfgTableCfg.isAjax"
+                  [extraParams]="shareCfgTableCfg.params"
+                  [columns]="shareCfgTableCfg.tableColumns"
+                  [resReName]="shareCfgTableCfg.resReName"
+                  [reqReName]="shareCfgTableCfg.reqReName"
+                  [preDataChange]="shareCfgTableCfg.preDataChange">
+
+        <ng-template st-row="categoryTypeRender" let-item>
+            {{helper.isEmpty(item['categoryType'])?'/':item["categoryType"]|dictTrans:"MCH_TYPE"}}
+        </ng-template>
+
+        <!--单日限额渲染-->
+        <ng-template st-row="limitDayRender" let-item>
+            {{helper.isEmpty(item["limitDay"])?'/':item["limitDay"]}}
+        </ng-template>
+
+        <!--单笔限额渲染-->
+        <ng-template st-row="limitCountRender" let-item>
+            {{helper.isEmpty(item["limitSingleMin"])?'/':item["limitSingleMin"]}}-{{helper.isEmpty(item["limitSingleMax"])?'/':item["limitSingleMax"]}}
+        </ng-template>
+
+        <ng-template st-row="fixFloatRateRender" let-item>
+            {{item["fixFloatRate"]|dictTrans:"RATE_TYPE"}}
+        </ng-template>
+        <ng-template st-row="settleCycleRender" let-item>
+            {{item["settleCycle"]|dictTrans:"BALANCE_DATE"}}
+        </ng-template>
+        <ng-template st-row="chanShareRuleRender" let-item>
+            {{item["chanShareRule"]|dictTrans:"PAYCENTER_CH_TYPE"}}
+        </ng-template>
+        <ng-template st-row="stateRender" let-item>
+            <ng-container [ngSwitch]="item['state']">
+                <ng-container *ngIf="helper.btnRole('DIVIDECONFSTATE')">
+                    <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onStateClick(item)">
+                        {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                        <i class="anticon anticon-pause"></i>
+                    </nz-tag>
+                    <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onStateClick(item)">
+                        {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                        <i class="anticon anticon-caret-right"></i>
+                    </nz-tag>
+                </ng-container>
+                <ng-container *ngIf="!helper.btnRole('DIVIDECONFSTATE')">
+                    <nz-tag *ngSwitchCase="1" [nzColor]="'green'">
+                        {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                    </nz-tag>
+                    <nz-tag *ngSwitchCase="0" [nzColor]="'red'">
+                        {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                    </nz-tag>
+                </ng-container>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>

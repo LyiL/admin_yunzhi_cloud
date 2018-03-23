@@ -1,0 +1,26 @@
+<form nz-form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="4">
+            <label for="settleTitle" nz-form-item-required>{{'Settle.listPage.win.settleTitle'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="20">
+            <nz-input [nzId]="'settleTitle'" formControlName="settleTitle"  [(ngModel)]="BusinessDayForm.settleTitle" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+            <div nz-form-explain *ngIf="formGroup.controls.settleTitle.dirty&&formGroup.controls.settleTitle.hasError('required')">{{'Validate_bank.settleTitle'|translate}}</div>
+        </div>
+    </div>
+
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSm]="4">
+            <label for="remark">{{'Settle.listPage.win.remark'|translate}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="20">
+            <nz-input  name="remark" formControlName="remark"  [(ngModel)]="BusinessDayForm.remark" [nzType]="'textarea'" [nzRows]="'4'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzType]="'primary'" [disabled]="!formGroup.valid" [nzLoading]="isLoadingOne" [nzSize]="'large'">
+            <span>{{'Settle.listPage.win.btn'|translate}}</span>
+        </button>
+    </div>
+</form>
+

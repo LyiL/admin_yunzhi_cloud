@@ -1,0 +1,57 @@
+<div class="modal-header">
+    <div class="modal-title">{{'Mch.detailPage.channelCfg.detailTitle'|translate}}</div>
+</div>
+<desc-list size="large" col="2" class="mb-lg">
+<ng-container *ngFor="let cField of detailFields">
+    <desc-list-item term="{{cField.title}}">
+        <ng-template #isEmptyValue> / </ng-template>
+        <ng-container *ngIf="channelInfoData[cField.field] !== null; else isEmptyValue">
+            <ng-container [ngSwitch]="cField.type">
+                <ng-container *ngSwitchCase="'dict'">
+                    {{channelInfoData[cField.field]|dictTrans:cField['transKey']}}
+                </ng-container>
+                <ng-container *ngSwitchCase="'i18n'">
+                    <ng-container [ngSwitch]="channelInfoData[cField.field]">
+                        <nz-tag *ngSwitchCase="0" [nzColor]="'red'" >
+                            {{'Mch.detailPage.channelCfg.toAudit'|translate}}
+                        </nz-tag>
+                        <nz-tag *ngSwitchCase="1" [nzColor]="'orange'">
+                            {{'Mch.detailPage.channelCfg.handing'|translate}}
+                        </nz-tag>
+                        <nz-tag *ngSwitchCase="2" [nzColor]="'green'">
+                            {{'Mch.detailPage.channelCfg.success'|translate}}
+                        </nz-tag>
+                        <nz-tag *ngSwitchCase="3" [nzColor]="'gray'">
+                            {{'Mch.detailPage.channelCfg.fail'|translate}}
+                        </nz-tag>
+                        <nz-tag *ngSwitchCase="4" [nzColor]="'gray'">
+                            {{'Mch.detailPage.channelCfg.riskCTR'|translate}}
+                        </nz-tag>
+                    </ng-container>
+
+                </ng-container>
+                <ng-container *ngSwitchCase="'used'">
+                     <ng-container [ngSwitch]="channelInfoData[cField.field]">
+                         <nz-tag *ngSwitchCase="1" [nzColor]="'green'" >
+                             {{'Mch.detailPage.channelCfg.usedOk'|translate}}
+                         </nz-tag>
+                         <nz-tag *ngSwitchCase="0" [nzColor]="'red'">
+                             {{'Mch.detailPage.channelCfg.usedNo'|translate}}
+                         </nz-tag>
+                     </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'moneyShow'">
+                    {{channelInfoData[cField.field]/100}}
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                    {{channelInfoData[cField.field]}}
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </desc-list-item>
+</ng-container>
+</desc-list>
+<div class="modal-footer">
+    <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="onCancelHandle($event)">
+    {{'default.btn.backBtn'|translate}}</button>
+</div>

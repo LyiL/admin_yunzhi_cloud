@@ -1,0 +1,51 @@
+<form nz-form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label for="jsapiPath">{{'Mch.WXconfig.jsapiPath'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16">
+            <nz-input [(ngModel)]="model.jsapiPath"
+                      name="jsapiPath"
+                      nzId="jsapiPath"
+                      formControlName="jsapiPath"
+                      [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+        </div>
+    </div>
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label for="subAppid">{{'Mch.WXconfig.subAppid'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16">
+            <nz-input [(ngModel)]="model.subAppid"
+                      name="subAppid"
+                      nzId="subAppid"
+                      formControlName="subAppid"
+                      [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+        </div>
+    </div>
+    <div nz-row nz-form-item>
+        <div nz-col nz-form-label [nzSm]="6">
+            <label for="subscribeAppid">{{'Mch.WXconfig.subscribeAppid'|translate}}</label>
+        </div>
+        <div nz-col nz-form-control [nzSm]="16">
+            <nz-input [(ngModel)]="model.subscribeAppid"
+                      name="subscribeAppid"
+                      nzId="subscribeAppid"
+                      formControlName="subscribeAppid"
+                      [nzSize]="'large'"
+                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div nz-form-control>
+            <button nz-button [nzSize]="'large'" [nzType]="'primary'" [nzLoading]="isLoadingOne" [disabled]="!formGroup.valid">
+                {{'IntoPieces.listPage.addWin.saveBtn'|translate}}
+            </button>
+        </div>
+    </div>
+
+</form>

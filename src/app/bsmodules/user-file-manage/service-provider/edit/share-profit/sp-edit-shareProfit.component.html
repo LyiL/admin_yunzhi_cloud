@@ -1,0 +1,77 @@
+<nz-card [nzBordered]="false" nzTitle="{{'SP.detailPage.shareCfg.title'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="onAddShare()">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #SpShareTable
+                  [url]="tableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [isAjax]="tableCfg.isAjax"
+                  [extraParams]="tableCfg.params"
+                  [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName"
+                  [reqReName]="tableCfg.reqReName"
+                  [preDataChange]="tableCfg.preDataChange">
+
+        <ng-template st-row="categoryTypeRender" let-item>
+            {{!item['categoryType'] ? '/' : item["categoryType"]|dictTrans:"MCH_TYPE"}}
+        </ng-template>
+
+        <ng-template st-row="limitDayRender" let-item>
+                {{helper.isEmpty(item["limitDay"]) ? '/' : item["limitDay"]}}
+        </ng-template>
+
+        <ng-template st-row="limitCountRender" let-item>
+                {{helper.isEmpty(item["limitSingleMin"]) ? '/' : item["limitSingleMin"]}}-{{helper.isEmpty(item["limitSingleMax"]) ? '/' : item["limitSingleMax"]}}
+        </ng-template>
+
+        <!--<ng-template st-row="limitSingleMinRender" let-item>-->
+            <!--{{helper.isEmpty(item["limitSingleMin"])?'/':item["limitSingleMin"]}}-->
+        <!--</ng-template>-->
+        <!--<ng-template st-row="limitSingleMaxRender" let-item>-->
+            <!--{{helper.isEmpty(item["limitSingleMax"])?'/':item["limitSingleMax"]}}-->
+        <!--</ng-template>-->
+
+        <ng-template st-row="fixFloatRateRender" let-item>
+            {{item["fixFloatRate"]|dictTrans:"RATE_TYPE"}}
+        </ng-template>
+        <ng-template st-row="settleCycleRender" let-item>
+            {{item["settleCycle"]|dictTrans:"BALANCE_DATE"}}
+        </ng-template>
+        <ng-template st-row="chanShareRuleRender" let-item>
+            {{item["chanShareRule"]|dictTrans:"PAYCENTER_CH_TYPE"}}
+        </ng-template>
+        <ng-template st-row="stateRender" let-item>
+            <ng-container [ngSwitch]="item['state']">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onStateClick(item)">
+                    {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                    <i class="anticon anticon-pause"></i>
+                </nz-tag>
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onStateClick(item)">
+                    {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                    <i class="anticon anticon-caret-right"></i>
+                </nz-tag>
+            </ng-container>
+        </ng-template>
+
+    </simple-table>
+</nz-card>
+
+<div nz-row>
+    <div nz-col class="wrap-btn">
+        <nz-button-group>
+            <button nz-button type="button" (click)="prev()" nzSize="large" [nzType]="'default'">
+                <span>{{'SP.detailPage.prevBtn' | translate}}</span>
+            </button>
+            <button nz-button
+                    type="button"
+                    [disabled]="!hasData()"
+                    (click)="toNext()"
+                    nzSize="large"
+                    [nzType]="'primary'"
+                    [nzLoading]="isLoadingOne">
+                <span>{{'SP.detailPage.saveAndnextBtn' | translate}}</span>
+            </button>
+        </nz-button-group>
+    </div>
+</div>
+

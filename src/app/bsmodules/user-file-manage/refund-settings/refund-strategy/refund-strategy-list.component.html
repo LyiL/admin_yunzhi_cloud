@@ -1,0 +1,23 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="5">
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onAddStrategy()" [nzType]="'default'" [nzSize]="'large'" *ngIf="helper.btnRole('REFUNDPOLICYSETTINGADD')">
+                    <span>{{'RefundSets.refStrategyPage.btn.addBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #refundStrategyListTable [url]="tableCfg.url" [reqMehtod]="'POST'" [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName" [isAjax]="tableCfg.isAjax">
+        <ng-template st-row="useStateRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['useState']">
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'">{{helper.dictTrans('ENABLE_STATUS',item['useState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'">{{helper.dictTrans('ENABLE_STATUS',item['useState'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>

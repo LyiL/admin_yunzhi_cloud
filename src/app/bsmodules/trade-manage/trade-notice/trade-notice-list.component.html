@@ -1,0 +1,129 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <!--平台单号-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeNotice.listPage.search.orderNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="tradeNoticeListForm.orderNo"
+                                  name="orderNo"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <!--商户单号-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeNotice.listPage.search.outTradeNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="tradeNoticeListForm.outTradeNo"
+                                  name="orderNo"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <!--支付单号-->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeNotice.listPage.search.transactionId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="tradeNoticeListForm.transactionId"
+                                  name="orderNo"
+                                  [nzSize]="'large'"
+                                  nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+                <!--批量同步-->
+                <button nz-button (click)="onBatchSync()" [nzType]="'default'" [nzSize]="'large'" *ngIf="helper.btnRole('TRADESYNCBATCH')">
+                    <span>{{'TradeNotice.listPage.btn.batchSyncBtn'|translate}}</span>
+                </button>
+                <!--批量通知-->
+                <button nz-button (click)="onBatchNotice()" [nzType]="'default'" [nzSize]="'large'" *ngIf="helper.btnRole('TRADENOTICEBATCH')">
+                    <span>{{'TradeNotice.listPage.btn.batchNoticeBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+
+<!--订单详情-->
+<nz-card [nzBordered]="false"
+         class="ng-card-m"
+         *ngIf="!helper.isEmpty(noticeData)"
+         nzTitle="{{'TradeNotice.listPage.detail.title'|translate}}">
+    <desc-list size="large" class="mb-lg" col="2">
+        <ng-container *ngFor="let cField of noticeFields">
+            <desc-list-item term="{{cField.title}}">
+                <ng-template #isEmptyValue> / </ng-template>
+                    <ng-container *ngIf="!helper.isEmpty(noticeData[cField.field]); else isEmptyValue">
+                        <ng-container [ngSwitch]="cField.type">
+                            <ng-container *ngSwitchCase="'dict'">
+                                {{noticeData[cField.field]|dictTrans:cField['transKey']}}
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'fee'">
+                                {{noticeData[cField.field]|moneySpunYuanTrans:'1.0-2'}}
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'datetime'">
+                                {{noticeData[cField.field]|_date:cField['format']}}
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>{{noticeData[cField.field]}}</ng-container>
+                        </ng-container>
+                    </ng-container>
+            </desc-list-item>
+        </ng-container>
+    </desc-list>
+    <div nz-row class="text-center">
+        <nz-button-group>
+            <button nz-button [nzSize]="'large'" (click)="onOrderSync()" *ngIf="helper.btnRole('TRADESYNC')">
+                <span>{{'TradeNotice.listPage.btn.syncBtn'|translate}}</span>
+            </button>
+            <button nz-button [nzSize]="'large'" (click)="onOrderSupply()" *ngIf="helper.btnRole('TRADENOTICE')">
+                <span>{{'TradeNotice.listPage.btn.supplyBtn'|translate}}</span>
+            </button>
+        </nz-button-group>
+    </div>
+</nz-card>
+
+<!--交易通知列表-->
+<nz-card [nzBordered]="false">
+    <simple-table #tradeNoticeListTable
+                  [url]="tableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="tableCfg.params"
+                  [total]="tableCfg.total"
+                  [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName"
+                  [reqReName]="tableCfg.reqReName"
+                  [isAjax]="tableCfg.isAjax">
+
+        <!--通知状态渲染-->
+        <ng-template st-row="notifyStateRender" let-item>
+            <ng-template #notifyStateEmpty>/</ng-template>
+            <ng-container *ngIf="!helper.isEmpty(item['notifyState']);else notifyStateEmpty">
+                <ng-container [ngSwitch]="item['notifyState']">
+                    <nz-tag *ngSwitchCase='0' [nzColor]="'red'">
+                        {{helper.dictTrans('ORDER_NOTIFY_STATE',item['notifyState'])}}
+                    </nz-tag>
+                    <nz-tag *ngSwitchCase='1' [nzColor]="'green'">
+                        {{helper.dictTrans('ORDER_NOTIFY_STATE',item['notifyState'])}}
+                    </nz-tag>
+                </ng-container>
+            </ng-container>
+        </ng-template>
+
+        <!--请求类型渲染-->
+        <ng-template st-row="reqTypeRender" let-item>
+            {{helper.isEmpty(item['reqType']) ? '/' : helper.dictTrans('ORDER_NOTIFY_TYPE',item['reqType'])}}
+        </ng-template>
+    </simple-table>
+</nz-card>
+

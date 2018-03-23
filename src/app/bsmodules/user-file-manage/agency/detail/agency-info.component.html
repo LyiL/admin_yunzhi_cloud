@@ -1,0 +1,99 @@
+<div class="detail-user-state {{userState()}}"><span *ngIf="agencyInfoData">{{agencyInfoData['examState']|dictTrans:'EXAMINE_STATUS'}}</span></div>
+<nz-card [nzBordered]="false" nzTitle="{{'Agency.detailPage.detail.info.infoTitle'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="onEditBaseInfo()" *ngIf="helper.btnRole('AGENTEDIT')">{{'default.btn.editBtn'|translate}}</a>
+    </ng-template>
+    <ng-container *ngFor="let detailField of detailFields">
+        <desc-list size="large" title="{{detailField.title}}" class="mb-lg" col="2">
+            <ng-container *ngFor="let cField of detailField.children">
+                <desc-list-item term="{{cField.title}}">
+                    <ng-template #isEmptyValue> / </ng-template>
+                    <ng-container *ngIf="objectExtend.isString(cField.field)">
+                        <ng-container *ngIf="!helper.isEmpty(agencyInfoData[cField.field]); else isEmptyValue">
+                            <ng-container [ngSwitch]="cField.type">
+                                <ng-container *ngSwitchCase="'dict'">
+                                    {{agencyInfoData[cField.field]|dictTrans:cField['transKey']:cField['locationValue']}}
+                                    <ng-container *ngIf="cField['group']">
+                                        <ng-container *ngFor="let g of cField['group']">
+                                            <span>{{connector}}</span>
+                                            {{agencyInfoData[g]}}
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'datetime'">
+                                    {{agencyInfoData[cField.field]|_date:cField['format']}}
+                                    <ng-container *ngIf="cField['group']">
+                                        <ng-container *ngFor="let g of cField['group']">
+                                            <span>{{connector}}</span>
+                                            {{agencyInfoData[g]?(agencyInfoData[g]|_date:cField['format']):'/'}}
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'image'">
+                                    <a (click)="onImagePreview(cField.field)">{{'Agency.detailPage.detail.imagePreview'|translate}}</a>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    {{agencyInfoData[cField.field]}}
+                                    <ng-container *ngIf="cField['group']">
+                                        <ng-container *ngFor="let g of cField['group']">
+                                            <span>{{connector}}</span>
+                                            {{agencyInfoData[g]}}
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="objectExtend.isArray(cField.field)">
+                        <ng-container [ngSwitch]="cField.type">
+                            <ng-container *ngSwitchCase="'datetime'">
+                                <ng-container *ngFor="let subField of cField.field;index as i">
+                                    {{agencyInfoData[subField]?(agencyInfoData[subField]|_date:cField['format']):'/'}}
+                                    <span *ngIf="i < cField.field.length - 1">{{connector}}</span>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </desc-list-item>
+            </ng-container>
+        </desc-list>
+    </ng-container>
+</nz-card>
+<nz-card [nzBordered]="false" nzTitle="{{'Agency.detailPage.detail.accountInfo'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="onAddAccount()" *ngIf="helper.btnRole('AGENTACCOUNTNEW')">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #agencyAccountTable [url]="tableCfg.url" [reqMehtod]="'POST'" [isAjax]="tableCfg.isAjax"
+                  [extraParams]="tableCfg.params" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName">
+        <ng-template st-row="typeRender" let-item>
+            {{!helper.isEmpty(item['type'])?helper.dictTrans('ACCOUNT_TYPE',item['type']) : '/'}}
+        </ng-template>
+        <ng-template st-row="cardTypeRender" let-item>
+           {{!helper.isEmpty(item['cardType'])?helper.dictTrans('ACCOUNT_CARD_TYPE',item['cardType']) : '/'}}
+        </ng-template>
+        <ng-template st-row="subbranchNameRender" let-item>
+            {{!helper.isEmpty(item['subbranchName'])?item['subbranchName'] : '/'}}
+        </ng-template>
+        <ng-template st-row="subbanrchCodeRender" let-item>
+            {{!helper.isEmpty(item['subbanrchCode'])?item['subbanrchCode'] : '/'}}
+        </ng-template>
+    </simple-table>
+</nz-card>
+<nz-card [nzBordered]="false" nzTitle="{{'Agency.detailPage.detail.operationInfo'|translate}}" class="ng-card-m">
+    <div class="operation_record_wrap">
+        <div class="record" *ngFor="let record of agencyOperationLog | async">
+            <span class="time">{{record.examineTime|date:'yyyy-MM-dd HH:mm:ss'}}</span>
+            <span>{{record.examineRemark}}</span>
+            <span class="status">{{record.examineStatus}}</span>
+            <span class="operation">({{'Agency.detailPage.detail.operator'|translate}}{{record.examineUser}})</span>
+        </div>
+    </div>
+</nz-card>
+
+<div nz-row class="wrap-btn">
+    <nz-button-group>
+        <button nz-button nzSize="large" [nzType]="'primary'" *ngIf="helper.btnRole('AGENTEXAMINE')" (click)="onExamine()">{{'default.btn.examineBtn'|translate}}</button>
+        <button nz-button nzSize="large" *ngIf="helper.btnRole('AGENTEMAILSMI')" (click)="onSendEmailAndSTM()">{{'default.btn.sendEmailMsgBtn'|translate}}</button>
+    </nz-button-group>
+</div>

@@ -1,0 +1,28 @@
+<nz-card [nzBordered]="false" nzTitle="{{'Agency.detailPage.detail.accountInfo'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="onAddAccount()">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #agencyAccountTable [url]="tableCfg.url" [reqMehtod]="'POST'" [isAjax]="tableCfg.isAjax"
+                  [extraParams]="tableCfg.params" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName">
+        <ng-template st-row="typeRender" let-item>
+            {{!helper.isEmpty(item['type'])?helper.dictTrans('ACCOUNT_TYPE',item['type']) : '/'}}
+        </ng-template>
+        <ng-template st-row="cardTypeRender" let-item>
+            {{!helper.isEmpty(item['cardType'])?helper.dictTrans('ACCOUNT_CARD_TYPE',item['cardType']) : '/'}}
+        </ng-template>
+        <ng-template st-row="subbranchNameRender" let-item>
+            {{!helper.isEmpty(item['subbranchName'])?item['subbranchName'] : '/'}}
+        </ng-template>
+        <ng-template st-row="subbanrchCodeRender" let-item>
+            {{!helper.isEmpty(item['subbanrchCode'])?item['subbanrchCode'] : '/'}}
+        </ng-template>
+    </simple-table>
+</nz-card>
+<div nz-row class="wrap-btn">
+    <nz-button-group>
+        <button nz-button type="button" (click)="prev()" nzSize="large" [nzType]="'default'"><span>{{'default.btn.backToBtn'|translate}}</span></button>
+        <button nz-button type="button" (click)="toNext()" nzSize="large" [nzType]="'primary'" [disabled]="!hasData()" [nzLoading]="isLoading"><span>{{'default.btn.saveToNextBtn'|translate}}</span></button>
+    </nz-button-group>
+</div>
+

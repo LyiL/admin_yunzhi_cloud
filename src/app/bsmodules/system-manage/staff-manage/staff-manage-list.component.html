@@ -1,0 +1,89 @@
+<!--<pro-header title="{{'StaffM.listPage.html.title'|translate}}"></pro-header>-->
+<!--<pro-header ></pro-header>-->
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="20">
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="userName">{{'StaffM.listPage.search.userName'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="smListForm.userName" name="userName" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="userName"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="realName">{{'StaffM.listPage.search.realName'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="smListForm.realName" name="chanCode" [nzSize]="'large'" nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}" nzId="realName"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="isEnabled">{{'StaffM.listPage.search.isEnabled'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzId="isEnabled" name="isEnabled" [(ngModel)]="smListForm.isEnabled" nzPlaceHolder="{{'RM.listPage.html.pleaseselect'|translate}}">
+                            <nz-option [nzLabel]="'StaffM.listPage.html.all'|translate">></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of isEnabledStatus"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+                <button nz-button  [nzSize]="'large'" [nzType]="'default'" (click)="Onaddstaff()" *ngIf="helper.btnRole('ROLENEW')">
+                    <span>{{'StaffM.listPage.html.add'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #staffListTable
+                  [url]="staffTableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="staffTableCfg.params"
+                  [columns]="staffTableCfg.tableColumns"
+                  [resReName]="staffTableCfg.resReName"
+                  [reqReName]="staffTableCfg.reqReName"
+                  [isAjax]="staffTableCfg.isAjax">
+        <ng-template st-row="bRender" let-item>
+            <!--<a (click)="onModifypwd(item)">{{'StaffM.listPage.html.updatePsd'|translate}}</a>-->
+            <ng-container *ngIf="helper.btnRole('STAFFMODIFYPWD')" >
+                <a (click)="onModifypwd(item)">{{'StaffM.listPage.html.updatePsd'|translate}}</a>
+            </ng-container>
+            <ng-container *ngIf="!helper.btnRole('STAFFMODIFYPWD')" >/</ng-container>
+        </ng-template>
+
+        <ng-template st-row="allocationRender" let-item>
+            <ng-container  *ngIf="helper.btnRole('STAFFALLOTROLE')" >
+                <a (click)="onAllocation(item)">{{'StaffM.listPage.html.distribution'|translate}}</a>
+            </ng-container>
+            <ng-container *ngIf="!helper.btnRole('STAFFALLOTROLE')" >/</ng-container>
+        </ng-template>
+
+        <ng-template st-row="isEnbledStateRender" let-item>
+            <ng-container *ngIf="helper.btnRole('STAFFSTATE')"  [ngSwitch]="item['isEnabled']">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onEnabled(item)">
+                    {{'StaffM.listPage.html.normal'|translate}}
+                    <i class="anticon  anticon-pause"></i>
+                </nz-tag>
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onEnabled(item)">
+                    {{'StaffM.listPage.html.frozen'|translate}}
+                    <i class="anticon anticon-caret-right"></i>
+                </nz-tag>
+            </ng-container>
+            <ng-container *ngIf="!helper.btnRole('STAFFSTATE')" [ngSwitch]="item['isEnabled']">
+                <nz-tag>/</nz-tag>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>
+

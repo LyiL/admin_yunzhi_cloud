@@ -1,0 +1,158 @@
+<form nz-form [formGroup]="intoPiecesEditForm" (ngSubmit)="onSubmit()">
+
+    <div nz-row [nzType]="'flex'" [nzJustify]="'space-between'">
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="name">{{'IntoPieces.listPage.editWin.mchName'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.mchName"
+                          name="name"
+                          nzId="name"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="name"
+                          [nzDisabled]="true"></nz-input>
+            </div>
+        </div>
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="merchantCode">{{'IntoPieces.listPage.editWin.merchantCode'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.merchantCode"
+                          name="merchantCode"
+                          nzId="merchantCode"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="merchantCode"
+                          [nzDisabled]="true"></nz-input>
+            </div>
+        </div>
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="superiorName">{{'IntoPieces.listPage.editWin.superiorName'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.chanName"
+                          name="superiorName"
+                          nzId="superiorName"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'IntoPieces.listPage.editWin.superiorName'|translate}}"
+                          formControlName="chanName"
+                          [nzDisabled]="true"></nz-input>
+            </div>
+        </div>
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="bankName">{{'IntoPieces.listPage.editWin.bankName'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.bankName"
+                          name="bankName"
+                          nzId="bankName"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'IntoPieces.listPage.editWin.bankName'|translate}}"
+                          formControlName="bankName"
+                          [nzDisabled]="true"></nz-input>
+            </div>
+        </div>
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'IntoPieces.listPage.editWin.ptCenterId'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <search-input
+                              [(ngModel)]="model.ptCenterId"
+                              [name]="'ptCenterId'"
+                              nzId="ptCenterId"
+                              [nzSize]="'large'"
+                              formControlName="ptCenterId"
+                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                              [displayField]="'name'"
+                              [valueField]="'id'"
+                              [displayValue]="_centerName"
+                              [tableCfg]="ptCenterCfg"></search-input>
+            </div>
+        </div>
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6"><label
+                for="agencyCode">{{'IntoPieces.listPage.editWin.agencyName'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.agencyName"
+                          name="agencyCode"
+                          nzId="agencyCode"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'IntoPieces.listPage.editWin.agencyName'|translate}}"
+                          [nzDisabled]="true"
+                          formControlName="agencyCode"></nz-input>
+            </div>
+        </div>
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6"><label
+                for="providerNo">{{'IntoPieces.listPage.editWin.providerNo'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.providerNo" name="providerNo" nzId="providerNo"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="providerNo"></nz-input>
+            </div>
+        </div>
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'IntoPieces.listPage.editWin.applyState'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="applyState"
+                           name="applyState"
+                           [(ngModel)]="model.applyState"
+                           formControlName="applyState"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                           (nzSelectChange)="onChangeControl('applyState')">
+                    <nz-option
+                        *ngFor="let eStatus of applyState"
+                        [nzLabel]="eStatus.name"
+                        [nzValue]="eStatus.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="ally" *ngIf="onChangeControl('applyState')" nz-form-item-required>{{'IntoPieces.listPage.editWin.ally'|translate}}</label>
+                <label for="ally" *ngIf="!onChangeControl('applyState')">{{'IntoPieces.listPage.editWin.ally'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input name="ally"
+                          nzId="ally"
+                          [(ngModel)]="model.ally"
+                          [nzSize]="'large'"
+                          formControlName="ally"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"></nz-input>
+                <div nz-form-explain *ngIf="onChangeControl('applyState')" style="color:red;">
+                    {{'IntoPieces.listPage.editWin.intoState'|translate}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <div nz-form-control>
+            <button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!intoPiecesEditForm.valid" [nzLoading]="isLoad">
+                {{'IntoPieces.listPage.editWin.saveBtn'|translate}}
+            </button>
+        </div>
+    </div>
+</form>

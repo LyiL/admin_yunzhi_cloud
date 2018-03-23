@@ -1,0 +1,213 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="true">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'BussinessCheck.listPage.search.dateTitle'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="startAt"
+                                       [(ngModel)]="bussinessForm.startAt"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       nzId="startAt"
+                                       nzPlaceHolder="{{'BussinessCheck.listPage.search.startAt'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split"> {{line}} </p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="finishAt"
+                                       [(ngModel)]="bussinessForm.finishAt"
+                                       nzId="finishAt"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       [nzDisabledDate]="finishAtDateDisabled.bind(this)"
+                                       nzPlaceHolder="{{'BussinessCheck.listPage.search.finishAt'|translate}}"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'BussinessCheck.listPage.search.bankName'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="bussinessForm.agencyCode"
+                                      [name]="'agencyCode'"
+                                      nzId="agencyCode"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'orgNo'"
+                                      [tableCfg]="agencyCfg"
+                                      (nzSelect)="onAgencySelected($event)"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="ally">{{'BussinessCheck.listPage.search.ally'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="bussinessForm.ally" [name]="'ally'" nzId="ally" [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                      [displayField]="'companionName'"
+                                      [valueField]="'companion'"
+                                      [tableCfg]="allyCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'BussinessCheck.listPage.search.reconState'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzAllowClear
+                                   nzId="reconState"
+                                   name="reconState"
+                                   [(ngModel)]="bussinessForm.reconState"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option nzLabel="{{'SP.hint.all'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let eStatus of reconState"
+                                [nzLabel]="eStatus.name"
+                                [nzValue]="eStatus.id">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div nz-row>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'BussinessCheck.listPage.search.merchantNo'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="bussinessForm.merchantNo"
+                                      [name]="'merchantNo'"
+                                      nzId="merchantNo"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'merchantNo'"
+                                      [tableCfg]="merchantCfg"
+                                      [(displayValue)]="bussinessForm.merchantName"
+                                      [searchBefore]="onMerchantSearchBefore.bind(this)"
+                                      (nzSelect)="onMerchantSelected($event)"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'BussinessCheck.listPage.search.transId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select nzAllowClear
+                                   nzId="transId"
+                                   name="transId"
+                                   [(ngModel)]="bussinessForm.transId"
+                                   nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                            <nz-option nzLabel="{{'SP.hint.all'|translate}}"></nz-option>
+                            <nz-option
+                                *ngFor="let payType of payTypes"
+                                [nzLabel]="payType.transType"
+                                [nzValue]="payType.transId">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'BussinessCheck.listPage.search.centerId'|translate}}</label></div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="bussinessForm.centerId"
+                                      [name]="'centerId'"
+                                      nzId="centerId"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                                      [displayField]="'name'"
+                                      [valueField]="'id'"
+                                      [tableCfg]="centerCfg"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div nz-col [nzSpan]="5" class="mb-md">-->
+                <!--<div nz-form-item class="d-flex">-->
+                    <!--<div nz-form-label><label>{{'BussinessCheck.listPage.search.secondMchNo'|translate}}</label>-->
+                    <!--</div>-->
+                    <!--<div nz-form-control class="flex-1">-->
+                        <!--<search-input [(ngModel)]="bussinessForm.secondMchNo"-->
+                                      <!--[name]="'secondMchNo'"-->
+                                      <!--nzId="secondMchNo"-->
+                                      <!--[nzSize]="'large'"-->
+                                      <!--nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"-->
+                                      <!--[displayField]="'name'"-->
+                                      <!--[valueField]="'mchRole'"-->
+                                      <!--[tableCfg]="secondMchCfg"></search-input>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="true">
+    <simple-table #bussinessTable [url]="tableCfg.url" [reqMehtod]="'POST'"
+                  [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName"
+                  [isAjax]="tableCfg.isAjax">
+
+        <ng-template st-row="reconDayRender" let-item>
+                <span>{{item['reconDay'] | date: 'yyyy-MM-dd'}}</span> <br> <span>{{!helper.isEmpty(item['ally']) ? item['ally'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="merchantNameRender" let-item>
+                <span>{{!helper.isEmpty(item['merchantName']) ? item['merchantName'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="transNameRender" let-item>
+                <span>{{!helper.isEmpty(item['transName']) ? item['transName'] : '/'}}</span>
+        </ng-template>
+
+        <ng-template st-row="totalFeeRender" let-item>
+                <span>{{item['totalFee'] | number: '0.0-6'}}</span> <br> <span>{{item['refundFee'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <ng-template st-row="totalQuaRender" let-item>
+                <span>{{item['totalQua']}}</span> <br> <span>{{item['refundQua']}}</span>
+        </ng-template>
+
+        <ng-template st-row="eqTotalFeeRender" let-item>
+            <span>{{item['eqTotalFee'] | number: '0.0-6'}}</span> <br> <span>{{item['eqRefundFee'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <ng-template st-row="poundage2Render" let-item>
+                <span>{{item['poundage2'] | number: '0.0-6'}}</span> <br> <span>{{item['refundPodg2'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <ng-template st-row="trdPodgRender" let-item>
+                <span>{{item['trdPodg'] | number: '0.0-6'}}</span> <br> <span>{{item['trdRefundPodg'] | number: '0.0-6'}}</span>
+        </ng-template>
+
+        <ng-template st-row="reconStateRender" let-item let-index="index">
+            <ng-template #isEmptyValue> / </ng-template>
+            <ng-container [ngSwitch]="item['reconState']" *ngIf="!helper.isEmpty(item['reconState']); else isEmptyValue">
+                <nz-tag *ngSwitchCase='0' [nzColor]="'green'">{{helper.dictTrans('PARTNER_PRCSTATUS', item['reconState'])}}</nz-tag>
+                <nz-tag *ngSwitchCase='1' [nzColor]="'red'">{{helper.dictTrans('PARTNER_PRCSTATUS', item['reconState'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>

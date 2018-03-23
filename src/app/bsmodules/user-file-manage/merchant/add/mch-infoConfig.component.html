@@ -1,0 +1,33 @@
+<!--交易限额配置-->
+<nz-card [nzBordered]="false"
+         nzTitle="{{'SP.detailPage.infoCfg.tradeLimit.title'|translate}}"
+         class="ng-card-m"    *ngIf="helper.btnRole('MCHDEPLOYLIMIT')"
+         >
+
+    <ng-template #extra>
+        <a (click)="onEditTradeLimit()">{{'default.btn.configBtn'|translate}}</a>
+    </ng-template>
+    <desc-list size="large" class="mb-lg" col="2">
+        <ng-container *ngFor="let cField of tradeLimitFields">
+            <desc-list-item term="{{cField.title}}">
+                <ng-template #isEmptyValue> / </ng-template>
+                <ng-container *ngIf="!helper.isEmpty(tradeLimitData); else isEmptyValue">
+                    <ng-container *ngIf="!helper.isEmpty(tradeLimitData[cField.field]); else isEmptyValue">
+                        {{tradeLimitData[cField.field]}}
+                    </ng-container>
+                </ng-container>
+            </desc-list-item>
+        </ng-container>
+    </desc-list>
+</nz-card>
+
+<div nz-row class="wrap-btn">
+    <nz-button-group>
+        <button nz-button [nzType]="'default'" nzSize="large" (click)="onPrev()" >
+            <span>{{'default.btn.backToBtn'|translate}}</span>
+        </button>
+        <button nz-button [nzType]="'primary'" nzSize="large" (click)="onSubmit()" >
+            <span>{{'default.btn.saveAndSubmitBtn'|translate}}</span>
+        </button>
+    </nz-button-group>
+</div>

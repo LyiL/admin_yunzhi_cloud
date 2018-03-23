@@ -1,0 +1,251 @@
+<form nz-form [formGroup]="SpChannelFormGroup" (ngSubmit)="onSubmit()">
+    <div nz-row [nzType]="'flex'" [nzJustify]="'space-between'">
+        <!--支付类型-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label nz-form-item-required>{{'SP.detailPage.channelCfg.channelWin.transType'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14" nzHasFeedback>
+                <nz-select nzId="transId"
+                           name="transId"
+                           [(ngModel)]="model.transId"
+                           formControlName="transId"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                           (nzSelectChange)="onTransSelect($event)"
+                           [nzDisabled]="transFlag">
+                    <nz-option
+                        *ngFor="let paytype of payType | async"
+                        [nzLabel]="paytype.transType"
+                        [nzValue]="paytype.transId">
+                    </nz-option>
+                </nz-select>
+                <div nz-form-explain *ngIf="getFormControl('transId').dirty&&getFormControl('transId').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+            </div>
+        </div>
+        <!--所属银行-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-form-label nz-col [nzSm]="8">
+                <label nz-form-item-required>{{'SP.detailPage.channelCfg.channelInfo.agencyName'|translate}}</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" nzHasFeedback>
+                <search-input [(ngModel)]="model.agencyCode"
+                              [name]="'agencyCode'"
+                              [nzSize]="'large'"
+                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                              formControlName="agencyCode"
+                              [tableCfg]="agencyCodeCfg"
+                              (nzSelect)="onAgencyCodeSelected($event)"
+                              [nzDisabled]="isUloFlag"
+                              [searchBefore]="onAgencyCodeSearchBefore.bind(this)"
+                              [(displayValue)]="model.agencyName"
+                              [displayField]="'name'"
+                              [valueField]="'orgNo'"
+                ></search-input>
+            </div>
+        </div>
+        <!--通道类型-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSm]="8">
+                <label nz-form-item-required>{{'SP.detailPage.channelCfg.channelInfo.ptCenterName'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSm]="14" nzHasFeedback>
+                <search-input nzAllowClear
+                              [(ngModel)]="model.ptCenterId"
+                              [name]="'ptCenterId'"
+                              nzId="ptCenterId"
+                              [nzSize]="'large'"
+                              formControlName="ptCenterId"
+                              nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                              [displayField]="'name'"
+                              [valueField]="'id'"
+                              (nzSelect)="onPtCenterIdSelected($event)"
+                              [(displayValue)]="model.ptCenterName"
+                              [tableCfg]="ptCenterCfg"
+                              [searchBefore]="onPtCenterIdBefore.bind(this)"></search-input>
+                <div nz-form-explain *ngIf="getFormControl('ptCenterId').dirty&&getFormControl('ptCenterId').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+            </div>
+        </div>
+        <!--渠道编号-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label for="providerNo">{{'SP.detailPage.channelCfg.channelWin.providerNo'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14">
+                <nz-input [(ngModel)]="model.providerNo"
+                          name="providerNo"
+                          nzId="providerNo"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="providerNo"></nz-input>
+                <div nz-form-explain
+                     *ngIf="getFormControl('providerNo').dirty&&getFormControl('providerNo').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+            </div>
+        </div>
+        <!--第三方平台商户号-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label for="ally">{{'SP.detailPage.channelCfg.channelWin.thirdMchId'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14">
+                <nz-input [(ngModel)]="model.ally"
+                          name="ally"
+                          nzId="ally"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="ally"></nz-input>
+            </div>
+        </div>
+        <!--第三方平台商户号密钥-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label for="pcmPartkey">{{'SP.detailPage.channelCfg.channelWin.pcmPartkey'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14">
+                <nz-input [(ngModel)]="model.pcmPartkey"
+                          name="pcmPartkey"
+                          nzId="pcmPartkey"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="pcmPartkey"></nz-input>
+            </div>
+        </div>
+        <!--启用状态-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label nz-form-item-required>{{'SP.detailPage.channelCfg.channelWin.used'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14" nzHasFeedback>
+                <nz-select nzId="used"
+                           name="used"
+                           [(ngModel)]="model.used"
+                           formControlName="used"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                    <nz-option
+                        *ngFor="let state of states"
+                        [nzLabel]="state.name"
+                        [nzValue]="state.id">
+                    </nz-option>
+                </nz-select>
+                <div nz-form-explain
+                     *ngIf="getFormControl('used').dirty&&getFormControl('used').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+            </div>
+        </div>
+        <!--单日限额-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label for="limitDay">{{'SP.detailPage.channelCfg.channelWin.limitDay'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14">
+                <nz-input [(ngModel)]="model.limitDay"
+                          name="limitDay"
+                          nzId="limitDay"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="limitDay"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('limitDay').dirty&&getFormControl('limitDay').value&&getFormControl('limitDay').hasError('numberError')">
+                    {{'default.validationMessages.numberErr'|translate}}
+                </div>
+            </div>
+        </div>
+        <!--单笔限额：最小-最大-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label for="limitSingleMin">{{'SP.detailPage.channelCfg.channelWin.limitSingleMin'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="6">
+                <nz-input [(ngModel)]="model.limitSingleMin"
+                          name="limitSingleMin"
+                          nzId="limitSingleMin"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'SP.detailPage.shareCfg.shareCfgWin.limitSingleMin'|translate}}"
+                          formControlName="limitSingleMin"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('limitSingleMin').dirty&&getFormControl('limitSingleMin').value&&getFormControl('limitSingleMin').hasError('numberError')">
+                    {{'default.validationMessages.numberErr'|translate}}
+                </div>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="2" class="text-center"> - </div>
+            <div nz-col nz-form-control [nzSpan]="6">
+                <nz-input [(ngModel)]="model.limitSingle"
+                          name="limitSingle"
+                          nzId="limitSingle"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'SP.detailPage.shareCfg.shareCfgWin.limitSingleMax'|translate}}"
+                          formControlName="limitSingle"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('limitSingle').dirty&&getFormControl('limitSingle').value&&getFormControl('limitSingle').hasError('numberError')">
+                    {{'default.validationMessages.numberErr'|translate}}
+                </div>
+            </div>
+        </div>
+        <!--商户APPID-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label for="thirdAppid">{{'SP.detailPage.channelCfg.channelWin.thirdAppid'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14">
+                <nz-input [(ngModel)]="model.thirdAppid"
+                          name="thirdAppid"
+                          nzId="thirdAppid"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="thirdAppid"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('thirdAppid').dirty&&getFormControl('thirdAppid').value&&getFormControl('thirdAppid').hasError('numberError')">
+                    {{'default.validationMessages.numberErr'|translate}}
+                </div>
+            </div>
+        </div>
+        <!--结算周期-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label nz-form-item-required>{{'SP.detailPage.channelCfg.channelWin.settleCycle'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14" nzHasFeedback>
+                <nz-select nzId="settleCycle"
+                           name="settleCycle"
+                           [(ngModel)]="model.settleCycle"
+                           formControlName="settleCycle"
+                           nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}">
+                    <nz-option
+                        *ngFor="let cycle of cycles"
+                        [nzLabel]="cycle.name"
+                        [nzValue]="cycle.id">
+                    </nz-option>
+                </nz-select>
+                <div nz-form-explain *ngIf="getFormControl('settleCycle').dirty&&getFormControl('settleCycle').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+            </div>
+        </div>
+        <!--结算费率-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="8">
+                <label for="settleRate" nz-form-item-required>{{'SP.detailPage.channelCfg.channelWin.settleRate'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="14" nzHasFeedback>
+                <nz-input [(ngModel)]="model.settleRate"
+                          name="settleRate"
+                          nzId="settleRate"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="settleRate"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('settleRate').dirty&&getFormControl('settleRate').value&&getFormControl('settleRate').hasError('numberError')">
+                    {{'default.validationMessages.numberErr'|translate}}
+                </div>
+                <div nz-form-explain
+                     *ngIf="getFormControl('settleRate').dirty&&getFormControl('settleRate').hasError('required')">
+                    {{'default.validationMessages.emptyErr'|translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!SpChannelFormGroup.valid" [nzLoading]="isLoadingOne">{{'default.btn.saveBtn' | translate}}</button>
+    </div>
+</form>

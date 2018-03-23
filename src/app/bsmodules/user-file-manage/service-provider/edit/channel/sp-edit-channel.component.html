@@ -1,0 +1,133 @@
+<!--总通道信息-->
+<nz-card [nzBordered]="false"
+         nzTitle="{{'SP.detailPage.totalChannelCfg.title'|translate}}"
+         class="ng-card-m"
+         *ngIf="helper.hasConfigValueMatch('CLOUD_ULO_BANK_NO',stepData.model['bankCode'])">
+    <ng-template #extra>
+        <a (click)="addTotalChannel()">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #spTotalChannelTable
+                  [url]="totalChannelTableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [isAjax]="totalChannelTableCfg.isAjax"
+                  [extraParams]="totalChannelTableCfg.params"
+                  [columns]="totalChannelTableCfg.tableColumns"
+                  [resReName]="totalChannelTableCfg.resReName"
+                  [reqReName]="totalChannelTableCfg.reqReName">
+
+        <!--银行服务商编号渲染-->
+        <ng-template st-row="bankProNoRender" let-item>
+            {{helper.isEmpty(item['bankProNo']) ? '/' : item['bankProNo']}}
+        </ng-template>
+
+        <!--同步状态渲染-->
+        <ng-template st-row="applyStateRender" let-item>
+            <ng-container>
+                {{item['applyState']|dictTrans:'SUBMCH_SYNC_STATE'}}
+            </ng-container>
+        </ng-template>
+
+        <!--最近同步时间渲染-->
+        <ng-template st-row="applyTimeRender" let-item>
+            {{helper.isEmpty(item['applyTime']) ? '/' : (item['applyTime'] | _date: 'YYYY-MM-DD HH:mm:ss')}}
+        </ng-template>
+    </simple-table>
+</nz-card>
+
+<!--渠道信息-->
+<nz-card [nzBordered]="false" nzTitle="{{'SP.detailPage.channelCfg.title'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="onAddChannel()">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #SpChannelTable
+                  [url]="channelTableCfg.url"
+                  [reqMehtod]="'POST'"
+                  [extraParams]="channelTableCfg.params"
+                  [isAjax]="channelTableCfg.isAjax"
+                  [columns]="channelTableCfg.tableColumns"
+                  [resReName]="channelTableCfg.resReName"
+                  [reqReName]="channelTableCfg.reqReName"
+                  [preDataChange]="channelTableCfg.preDataChange">
+
+        <ng-template st-row="providerNoRender" let-item>
+            {{helper.isEmpty(item['providerNo']) ? '/' : item['providerNo']}}
+        </ng-template>
+
+        <ng-template st-row="usedRender" let-item>
+            <ng-container [ngSwitch]="item['used']">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onUsedClick(item)">
+                    {{'SP.detailPage.channelCfg.usedOk'|translate}}
+                    <i class="anticon anticon-pause"></i>
+                </nz-tag>
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onUsedClick(item)">
+                    {{'SP.detailPage.channelCfg.usedNo'|translate}}
+                    <i class="anticon anticon-caret-right"></i>
+                </nz-tag>
+            </ng-container>
+        </ng-template>
+
+        <ng-template st-row="settleCycleRender" let-item>
+            {{helper.dictTrans('BALANCE_DATE',item['settleCycle'])}}
+        </ng-template>
+
+    </simple-table>
+</nz-card>
+
+<!--路由配置-->
+<nz-card [nzBordered]="false"
+         nzTitle="{{'SP.detailPage.tradeRuleCfg.title'|translate}}"
+         class="ng-card-m"
+         *ngIf="helper.hasConfigValueMatch('CLOUD_ULO_BANK_NO',stepData.model['bankCode'])">
+    <desc-list size="large" class="mb-lg" col="1">
+        <desc-list-item term="{{'SP.detailPage.tradeRuleCfg.detail.ruleState'|translate}}">
+            <!--没有数据默认为启用-->
+            <ng-template #tradeRuleEmpty>
+                <nz-tag [nzColor]="'green'" (click)="onChangeTradeRule(tradeRuleData)">
+                    {{helper.dictTrans('ENABLE_STATUS', 1)}}
+                    <i class="anticon anticon-pause"></i>
+                </nz-tag>
+            </ng-template>
+
+            <ng-container *ngIf="!helper.isEmpty(tradeRuleData); else tradeRuleEmpty">
+                <ng-container [ngSwitch]="tradeRuleData['ruleState']">
+                    <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onChangeTradeRule(tradeRuleData)">
+                        {{helper.dictTrans('ENABLE_STATUS', tradeRuleData['ruleState'])}}
+                        <i class="anticon anticon-caret-right"></i>
+                    </nz-tag>
+                    <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onChangeTradeRule(tradeRuleData)">
+                        {{helper.dictTrans('ENABLE_STATUS', tradeRuleData['ruleState'])}}
+                        <i class="anticon anticon-pause"></i>
+                    </nz-tag>
+                </ng-container>
+            </ng-container>
+        </desc-list-item>
+
+        <desc-list-item term="{{'SP.detailPage.tradeRuleCfg.detail.tradeType'|translate}}">
+            <ng-container *ngIf="!helper.isEmpty(tradeRuleData);else tradeTypeEmpty">
+                <ng-container *ngIf="!helper.isEmpty(tradeRuleData['tradeType']);else tradeTypeEmpty">
+                    {{tradeRuleData['tradeType']}}
+                </ng-container>
+            </ng-container>
+            <ng-template #tradeTypeEmpty>--</ng-template>
+        </desc-list-item>
+    </desc-list>
+</nz-card>
+
+<div nz-row>
+    <div nz-col class="wrap-btn">
+        <nz-button-group>
+            <button nz-button type="button" (click)="prev()" nzSize="large" [nzType]="'default'">
+                <span>{{'SP.detailPage.prevBtn' | translate}}</span>
+            </button>
+            <button nz-button
+                    type="button"
+                    (click)="toNext()"
+                    nzSize="large"
+                    [disabled]="!hasData()"
+                    [nzType]="'primary'"
+                    [nzLoading]="isLoadingOne">
+                <span>{{'SP.detailPage.saveAndnextBtn' | translate}}</span>
+            </button>
+        </nz-button-group>
+    </div>
+</div>

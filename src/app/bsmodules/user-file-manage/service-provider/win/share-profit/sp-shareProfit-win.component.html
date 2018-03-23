@@ -1,0 +1,182 @@
+
+<form nz-form [formGroup]="SpShareWinFormGroup" (ngSubmit)="onSubmit()">
+
+    <div nz-row [nzType]="'flex'" [nzJustify]="'space-between'">
+        <!--支付类型-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.shareCfg.shareCfgWin.transType'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="transId"
+                           name="transId"
+                           [(ngModel)]="model.transId"
+                           formControlName="transId"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                           (nzSelectChange)="onTransSelect($event)"
+                [nzDisabled]="transFlag">
+                    <nz-option
+                        *ngFor="let paytype of payType | async"
+                        [nzLabel]="paytype.transType"
+                        [nzValue]="paytype.transId">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <!--行业类别-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.shareCfg.shareCfgWin.categoryType'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="categoryType"
+                           name="categoryType"
+                           [(ngModel)]="model.categoryType"
+                           formControlName="categoryType"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                    <nz-option
+                        *ngFor="let category of categoryTypes"
+                        [nzLabel]="category.name"
+                        [nzValue]="category.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <!--单日限额-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="limitDay">{{'SP.detailPage.shareCfg.shareCfgWin.limitDay'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.limitDay"
+                          name="limitDay"
+                          nzId="limitDay"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="limitDay"></nz-input>
+            </div>
+        </div>
+        <!--单笔限额-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="limitSingleMin">{{'SP.detailPage.shareCfg.shareCfgWin.limit'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="7">
+                <nz-input [(ngModel)]="model.limitSingleMin"
+                          name="limitSingleMin"
+                          nzId="limitSingleMin"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'SP.detailPage.shareCfg.shareCfgWin.limitSingleMin'|translate}}"
+                          formControlName="limitSingleMin"></nz-input>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="2" class="text-center"> - </div>
+            <div nz-col nz-form-control [nzSpan]="7">
+                <nz-input [(ngModel)]="model.limitSingleMax"
+                          name="limitSingleMax"
+                          nzId="limitSingleMax"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'SP.detailPage.shareCfg.shareCfgWin.limitSingleMax'|translate}}"
+                          formControlName="limitSingleMax"></nz-input>
+            </div>
+        </div>
+        <!--费率-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label for="chanRate" nz-form-item-required>{{'SP.detailPage.shareCfg.shareCfgWin.rate'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-input [(ngModel)]="model.chanRate"
+                          name="chanRate"
+                          nzId="chanRate"
+                          [nzSize]="'large'"
+                          nzPlaceHolder="{{'default.hint.pleaseInput'|translate}}"
+                          formControlName="chanRate"></nz-input>
+                <div nz-form-explain
+                     *ngIf="getFormControl('chanRate').dirty&&getFormControl('chanRate').hasError('required')">
+                    {{'default.validationMessages.emptyErr' | translate}}
+                </div>
+            </div>
+        </div>
+        <!--费率类型-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.shareCfg.shareCfgWin.fixFloatRate'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="fixFloatRate"
+                           name="fixFloatRate"
+                           [(ngModel)]="model.fixFloatRate"
+                           formControlName="fixFloatRate"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                    <nz-option
+                        *ngFor="let _rateType of rateType"
+                        [nzLabel]="_rateType.name"
+                        [nzValue]="_rateType.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <!--结算/分润周期-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.shareCfg.shareCfgWin.settleAndshare'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="settleCycle"
+                           name="settleCycle"
+                           [(ngModel)]="model.settleCycle"
+                           formControlName="settleCycle"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                    <nz-option
+                        *ngFor="let _settleCycle of settleCycle"
+                        [nzLabel]="_settleCycle.name"
+                        [nzValue]="_settleCycle.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <!--分润规则-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.shareCfg.shareCfgWin.share'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="chanShareRule"
+                           name="chanShareRule"
+                           [(ngModel)]="model.chanShareRule"
+                           formControlName="chanShareRule"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                    <nz-option
+                        *ngFor="let _shareRule of shareRule"
+                        [nzLabel]="_shareRule.name"
+                        [nzValue]="_shareRule.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <!--状态-->
+        <div nz-col nz-form-item [nzSpan]="12">
+            <div nz-col nz-form-label [nzSpan]="6">
+                <label nz-form-item-required>{{'SP.detailPage.shareCfg.shareCfgWin.used'|translate}}</label>
+            </div>
+            <div nz-col nz-form-control [nzSpan]="16">
+                <nz-select nzId="state"
+                           name="state"
+                           [(ngModel)]="model.state"
+                           formControlName="state"
+                           nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}">
+                    <nz-option
+                        *ngFor="let state of useState"
+                        [nzLabel]="state.name"
+                        [nzValue]="state.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+
+    </div>
+
+    <div  class="modal-footer">
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'" [disabled]="!(SpShareWinFormGroup.valid)" [nzLoading]="isLoadingOne">{{'default.btn.saveBtn' | translate}}</button>
+    </div>
+</form>

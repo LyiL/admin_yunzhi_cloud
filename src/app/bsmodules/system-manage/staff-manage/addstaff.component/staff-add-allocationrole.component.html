@@ -1,0 +1,22 @@
+<form nz-form [formGroup]="StatusForm" (ngSubmit)="_submitForm()" style="margin-top:50px">
+    <div nz-form-item nz-row [nzGutter]="16">
+        <div nz-form-label nz-col [nzSm]="4">
+            <label nz-form-item-required>{{this.i18n.fanyi('StaffM.listPage.html.pleaseallorole'|translate)}}</label>
+        </div>
+        <div nz-form-control nz-col [nzSm]="20">
+            <nz-checkbox-group [(ngModel)]="roles"  formControlName="syncStatus" (ngModelChange)="RoleChceck(roles)">
+            </nz-checkbox-group>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-control nz-col class="text-center">
+            <nz-button-group>
+                <button nz-button (click)="_cancel()" >{{this.i18n.fanyi('StaffM.listPage.html.cal'|translate)}}</button>
+                <button nz-button [nzType]="'primary'"  [disabled]="disable"  [nzLoading]="isLoading" >{{this.i18n.fanyi('StaffM.listPage.html.save'|translate)}}</button>
+            </nz-button-group>
+
+        </div>
+    </div>
+</form>
+
+

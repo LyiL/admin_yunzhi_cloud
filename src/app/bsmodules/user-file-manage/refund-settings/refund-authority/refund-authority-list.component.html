@@ -1,0 +1,30 @@
+<!--<pro-header></pro-header>-->
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="5">
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <button nz-button (click)="onAddAuthority()" [nzType]="'default'" [nzSize]="'large'" *ngIf="helper.btnRole('REFUNDAUTHSETTINGADD')">
+                    <span>{{'RefundSets.refAuthPage.btn.addBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+<nz-card [nzBordered]="false">
+    <simple-table #refundAuthListTable [url]="tableCfg.url" [reqMehtod]="'POST'" [extraParams]="tableCfg.params" [total]="tableCfg.total" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName" [isAjax]="tableCfg.isAjax">
+        <ng-template st-row="examTypeRender" let-item>
+            {{item['examType']?helper.dictTrans('REFUND_EXAMINE_TYPE',item['examType']) : '/'}}
+        </ng-template>
+        <ng-template st-row="isEnabledRender" let-item let-index="index">
+            <ng-container [ngSwitch]="item['isEnabled']" *ngIf="helper.btnRole('REFUNDAUTHSETTINGCHANGE')">
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onUpdateStatus(item)">{{helper.dictTrans('ENABLE_STATUS',item['isEnabled'])}}<i class="anticon anticon-caret-right"></i></nz-tag>
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onUpdateStatus(item)">{{helper.dictTrans('ENABLE_STATUS',item['isEnabled'])}}<i class="anticon anticon-pause"></i></nz-tag>
+            </ng-container>
+            <ng-container [ngSwitch]="item['isEnabled']" *ngIf="!helper.btnRole('REFUNDAUTHSETTINGCHANGE')">
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'" >{{helper.dictTrans('ENABLE_STATUS',item['isEnabled'])}}</nz-tag>
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'">{{helper.dictTrans('ENABLE_STATUS',item['isEnabled'])}}</nz-tag>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>

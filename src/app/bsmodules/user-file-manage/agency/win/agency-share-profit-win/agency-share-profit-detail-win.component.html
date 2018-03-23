@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <div class="modal-title">{{'Agency.detailPage.shareProfitCfg.shareProfitDetailWinTitle'|translate}}</div>
+</div>
+<desc-list size="large" col="2" class="mb-lg">
+<ng-container *ngFor="let cField of detailFields">
+    <desc-list-item term="{{cField.title}}">
+        <ng-template #isEmptyValue> / </ng-template>
+        <ng-container *ngIf="channelInfoData[cField.field] !== null; else isEmptyValue">
+            <ng-container [ngSwitch]="cField.type">
+                <ng-container *ngSwitchCase="'money'">
+                    {{channelInfoData[cField.field]| moneySpunYuanTrans}}
+                </ng-container>
+                <ng-container *ngSwitchCase="'dict'">
+                    {{channelInfoData[cField.field]|dictTrans:cField['transKey']}}
+                </ng-container>
+                <ng-container *ngSwitchCase="'i18n'">
+                    <ng-container [ngSwitch]="channelInfoData[cField.field]">
+                        <nz-tag *ngSwitchCase="1" [nzColor]="'green'" >
+                            <!--{{'Agency.detailPage.shareProfitCfg.usedOk'|translate}}-->
+                            {{channelInfoData[cField.field]|dictTrans:"ENABLE_STATUS"}}
+                        </nz-tag>
+                        <nz-tag *ngSwitchCase="0" [nzColor]="'red'">
+                            <!--{{'Agency.detailPage.shareProfitCfg.usedNo'|translate}}-->
+                            {{channelInfoData[cField.field]|dictTrans:"ENABLE_STATUS"}}
+                        </nz-tag>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                    {{channelInfoData[cField.field]}}
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </desc-list-item>
+</ng-container>
+</desc-list>
+<div class="modal-footer">
+    <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="onCancelHandle()">
+    {{'default.btn.backBtn'|translate}}</button>
+</div>

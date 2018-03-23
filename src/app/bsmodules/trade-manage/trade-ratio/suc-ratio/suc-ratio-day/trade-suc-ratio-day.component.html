@@ -1,0 +1,131 @@
+<nz-card [nzBordered]="false">
+    <form nz-form [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="25">
+            <!--交易日期-->
+            <div nz-col [nzSpan]="7" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label>{{'TradeRatio.dayRatioPage.search.tradeTime'|translate}}</label></div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="tradeTimeStart"
+                                       [(ngModel)]="dayForm.tradeTimeStart"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       nzId="tradeTimeStart"
+                                       nzPlaceHolder="{{'TradeRatio.dayRatioPage.search.tradeTimeStart'|translate}}"></nz-datepicker>
+                    </div>
+                    <div>
+                        <p nz-form-split class="picker-split"> - </p>
+                    </div>
+                    <div nz-form-control>
+                        <nz-datepicker [nzSize]="'large'"
+                                       name="tradeTimeEnd"
+                                       [(ngModel)]="dayForm.tradeTimeEnd"
+                                       nzId="tradeTimeEnd"
+                                       [nzFormat]="'YYYY-MM-DD'"
+                                       [nzDisabledDate]="tradeTimeEndDateDisabled.bind(this)"
+                                       nzPlaceHolder="{{'TradeRatio.dayRatioPage.search.tradeTimeEnd'|translate}}"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <!--受理机构-->
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>{{'TradeRatio.dayRatioPage.search.bankNo'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="dayForm.bankNo"
+                                      [name]="'bankNo'"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      nzId="bankNo"
+                                      [displayField]="'name'"
+                                      [valueField]="'orgNo'"
+                                      [tableCfg]="bankCodeCfg"
+                                      (nzSelect)="onBankNoSelected($event)"></search-input>
+                    </div>
+                </div>
+            </div>
+
+            <!--所属上级-->
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>{{'TradeRatio.dayRatioPage.search.agentno'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="dayForm.agentno"
+                                      [name]="'agentno'"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      nzId="agentno"
+                                      [displayField]="'name'"
+                                      [valueField]="'agentno'"
+                                      [(displayValue)]="dayForm.agencyName"
+                                      [tableCfg]="agentnoTableCfg"
+                                      (nzSelect)="onAgentnoSelected($event)"
+                                      [searchBefore]="onAgentnoSearchBefore.bind(this)"></search-input>
+                    </div>
+                </div>
+            </div>
+            <!--商户名称-->
+            <div nz-col [nzSpan]="5" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>{{'TradeRatio.dayRatioPage.search.merchantId'|translate}}</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <search-input [(ngModel)]="dayForm.merchantId"
+                                      [name]="'merchantId'"
+                                      [nzSize]="'large'"
+                                      nzPlaceHolder="{{'default.hint.pleaseChoose'|translate}}"
+                                      nzId="merchantId"
+                                      [displayField]="'name'"
+                                      [valueField]="'id'"
+                                      [(displayValue)]="dayForm.merchantName"
+                                      [tableCfg]="merchantIdTableCfg"
+                                      (nzSelect)="onMchSelected($event)"
+                                      [searchBefore]="onMchSearchBefore.bind(this)"></search-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="25">
+            <div nz-col class="mb-md">
+                <button nz-button (click)="onSearch()" [nzType]="'primary'" [nzSize]="'large'">
+                    <span>{{'default.btn.searchBtn'|translate}}</span>
+                </button>
+
+                <button nz-button (click)="onGoRatio()" [nzType]="'default'" [nzSize]="'large'">
+                    <span>{{'TradeRatio.listPage.btn.goRatioBtn'|translate}}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</nz-card>
+
+<nz-card [nzBordered]="false">
+    <!--<simple-table #ratioListTable-->
+                  <!--[url]="tableCfg.url"-->
+                  <!--[reqMehtod]="'POST'"-->
+                  <!--[reqHeaders]="tableCfg.reqHeaders"-->
+                  <!--[extraParams]="tableCfg.params"-->
+                  <!--[columns]="tableCfg.tableColumns"-->
+                  <!--[resReName]="tableCfg.resReName"-->
+                  <!--[reqReName]="tableCfg.reqReName"-->
+                  <!--[isAjax]="tableCfg.isAjax">-->
+
+        <!--&lt;!&ndash;成功比率渲染&ndash;&gt;-->
+        <!--<ng-template st-row="bRender" let-item>-->
+            <!--{{ helper.numberTrans( (item['sucNum'] / item['allNum']),'multiplication',100 ) | number:'1.0-2'}}-->
+        <!--</ng-template>-->
+
+        <!--&lt;!&ndash;交易总额渲染&ndash;&gt;-->
+        <!--<ng-template st-row="totalFeeRender" let-item>-->
+            <!--{{ item['totalFee']|moneySpunYuanTrans:'1.0-2'}}-->
+        <!--</ng-template>-->
+    <!--</simple-table>-->
+</nz-card>
+
+

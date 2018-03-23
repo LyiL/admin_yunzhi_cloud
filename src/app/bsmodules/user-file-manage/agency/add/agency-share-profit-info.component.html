@@ -1,0 +1,47 @@
+<nz-card [nzBordered]="false" nzTitle="{{'Agency.detailPage.shareProfitCfg.title'|translate}}" class="ng-card-m">
+    <ng-template #extra>
+        <a (click)="onAddChannel()">{{'default.btn.newBtn'|translate}}</a>
+    </ng-template>
+    <simple-table #agencyChannelTable [url]="tableCfg.url" [reqMehtod]="'POST'" [isAjax]="tableCfg.isAjax"
+                  [extraParams]="tableCfg.params" [columns]="tableCfg.tableColumns"
+                  [resReName]="tableCfg.resReName" [reqReName]="tableCfg.reqReName">
+        <ng-template st-row="categoryTypeRender" let-item>
+            {{helper.isEmpty(item['categoryType'])?'/':item["categoryType"]|dictTrans:"MCH_TYPE"}}
+        </ng-template>
+        <ng-template st-row="limitDayRender" let-item>
+            {{helper.isEmpty(item["limitDay"])?'/':item["limitDay"]}}
+        </ng-template>
+        <ng-template st-row="limitCountRender" let-item>
+            {{helper.isEmpty(item["limitSingleMin"])?'/':item["limitSingleMin"]}}-{{helper.isEmpty(item["limitSingleMax"])?'/':item["limitSingleMax"]}}
+        </ng-template>
+        <ng-template st-row="fixFloatRateRender" let-item>
+            {{helper.isEmpty(item["fixFloatRate"])?'/':item["fixFloatRate"]|dictTrans:"RATE_TYPE"}}
+        </ng-template>
+        <ng-template st-row="settleCycleRender" let-item>
+            {{helper.isEmpty(item["settleCycle"])?'/':item["settleCycle"]|dictTrans:"BALANCE_DATE"}}
+        </ng-template>
+        <ng-template st-row="shareRuleRender" let-item>
+            {{helper.isEmpty(item["chanShareRule"])?'/':item["chanShareRule"]|dictTrans:"PAYCENTER_CH_TYPE"}}
+        </ng-template>
+        <ng-template st-row="stateRender" let-item>
+            <ng-container [ngSwitch]="item['state']">
+                <nz-tag *ngSwitchCase="1" [nzColor]="'green'" (click)="onStateClick(item)">
+                    {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                    <i class="anticon anticon-pause"></i>
+                </nz-tag>
+                <nz-tag *ngSwitchCase="0" [nzColor]="'red'" (click)="onStateClick(item)">
+                    {{item["state"]|dictTrans:"ENABLE_STATUS"}}
+                    <i class="anticon anticon-caret-right"></i>
+                </nz-tag>
+            </ng-container>
+        </ng-template>
+    </simple-table>
+</nz-card>
+
+<div nz-row class="wrap-btn">
+    <nz-button-group>
+        <button nz-button type="button" (click)="prev()" nzSize="large">{{'default.btn.backToBtn'|translate}}</button>
+        <button nz-button type="button" [nzType]="'primary'" nzSize="large" [disabled]="!hasData()" (click)="onSubmit()" [nzLoading]="isLoading">{{'default.btn.saveAndSubmitBtn'|translate}}</button>
+    </nz-button-group>
+</div>
+

@@ -1,0 +1,32 @@
+<nz-card [nzBordered]="false" class="ng-card-m">
+    <desc-list size="large" class="mb-lg" col="2">
+        <ng-container *ngFor="let cField of detailFields">
+            <desc-list-item term="{{cField.title}}">
+                <ng-template #isEmptyValue> / </ng-template>
+                <ng-container *ngIf="!helper.isEmpty(eleInfoData[cField.field]); else isEmptyValue">
+                    <ng-container [ngSwitch]="cField.type">
+                        <ng-container *ngSwitchCase="'money'">
+                            <!--{{ eleInfoData[cField.field]| moneySpunYuanTrans}}-->
+                            {{eleInfoData[cField.field]*100}}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'dict'">
+                            {{eleInfoData[cField.field]|dictTrans:cField['transKey']}}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'datetime'">
+                            {{eleInfoData[cField.field]|_date:cField['format']}}
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>{{eleInfoData[cField.field]}}</ng-container>
+                    </ng-container>
+                </ng-container>
+            </desc-list-item>
+        </ng-container>
+    </desc-list>
+    <div nz-row class="text-center">
+        <div nz-col>
+            <button nz-button [nzSize]="'large'" (click)="onBack()">
+                {{'default.btn.backBtn'|translate}}
+            </button>
+        </div>
+    </div>
+</nz-card>
+

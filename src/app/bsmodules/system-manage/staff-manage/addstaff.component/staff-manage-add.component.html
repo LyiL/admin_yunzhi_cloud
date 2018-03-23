@@ -1,0 +1,18 @@
+<!--<pro-header ></pro-header>-->
+<!--<nz-card [nzBordered]="false" [nzNoHovering]="true">-->
+    <!--<ng-template #body>-->
+        <!--<nz-steps [(nzCurrent)]="staffSev.step">-->
+            <!--<nz-step nzTitle="{{'StaffM.nzTitle.step1Title'|translate}}"></nz-step>-->
+            <!--<nz-step nzTitle="{{'StaffM.nzTitle.step2Title'|translate}}"></nz-step>-->
+            <!--<nz-step nzTitle="{{'StaffM.nzTitle.step3Title'|translate}}"></nz-step>-->
+        <!--</nz-steps>-->
+        <!--<staff-add-step1 *ngIf="staffSev.step==0"></staff-add-step1>-->
+        <!--<staff-add-step2  *ngIf="staffSev.step==1"></staff-add-step2>-->
+        <!--<staff-add-suc *ngIf="staffSev.step==2"></staff-add-suc>-->
+    <!--</ng-template>-->
+<!--</nz-card>-->
+
+<nz-card [nzBordered]="false">
+    <dynamic-steps [steps]="steps" ></dynamic-steps>
+</nz-card>
+
